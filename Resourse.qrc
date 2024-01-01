@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/Buttons">
+        <file>Resourse/Buttons/Settings.png</file>
+        <file>Resourse/Buttons/Settings_Transparent.png</file>
+        <file>Resourse/Buttons/Close.png</file>
+        <file>Resourse/Buttons/Close_Transparent.png</file>
+        <file>Resourse/Buttons/Clear.png</file>
+        <file>Resourse/Buttons/Clear_Transparent.png</file>
+        <file>Resourse/Buttons/Resize.png</file>
+        <file>Resourse/Buttons/Resize_Transparent.png</file>
+    </qresource>
+    <qresource prefix="/CheckBox">
+        <file>Resourse/CheckBox/CheckBox_Checked.png</file>
+        <file>Resourse/CheckBox/CheckBox_Checked_Hover.png</file>
+        <file>Resourse/CheckBox/CheckBox_Checked_Pressed.png</file>
+        <file>Resourse/CheckBox/CheckBox_Unchecked.png</file>
+        <file>Resourse/CheckBox/CheckBox_Unchecked_Hover.png</file>
+        <file>Resourse/CheckBox/CheckBox_Unchecked_Pressed.png</file>
+    </qresource>
+    <qresource prefix="/Icons">
+        <file>Resourse/Warning.png</file>
+    </qresource>
+    <qresource prefix="/ComboBox">
+        <file>Resourse/ComboBox/Arrow-Down.png</file>
+        <file>Resourse/ComboBox/Arrow-Up.png</file>
+    </qresource>
+</RCC>

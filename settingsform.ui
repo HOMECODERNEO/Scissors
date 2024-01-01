@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingsForm</class>
+ <widget class="QWidget" name="SettingsForm">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>253</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(90, 96, 125);</string>
+  </property>
+  <widget class="QLabel" name="settings_label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>501</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+font: 900 17pt &quot;Segoe UI&quot;;
+background-color: rgba(255, 255, 255, 0);</string>
+   </property>
+   <property name="text">
+    <string>Settings</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_autoRun">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>481</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+   </property>
+   <property name="text">
+    <string>Запуск программы при старте системы</string>
+   </property>
+  </widget>
+  <widget class="Line" name="line1">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>29</y>
+     <width>500</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>3</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+border-color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_rectSize">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>140</y>
+     <width>481</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+   </property>
+   <property name="text">
+    <string>Отображать размер и позицию при редактировании зоны</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="Line" name="line2">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>155</y>
+     <width>500</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>3</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+border-color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_stopFrame">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>481</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+   </property>
+   <property name="text">
+    <string>Использовать Стопкадр при создании скриншота</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="history_size_lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>13</x>
+     <y>180</y>
+     <width>51</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 127);
+background-color: rgba(55, 62, 93, 200);
+
+border-radius: 5px;
+border-width: 0px;
+border-style: solid;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="history_size_label">
+   <property name="geometry">
+    <rect>
+     <x>75</x>
+     <y>182</y>
+     <width>421</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);
+font: 9pt &quot;Segoe UI&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Вместимость истории</string>
+   </property>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>180</y>
+     <width>20</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+border-color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_screenshotModificationArea">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>481</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+   </property>
+   <property name="text">
+    <string>Возможность редактирования зоны скриншота</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="combobox_language">
+   <property name="geometry">
+    <rect>
+     <x>171</x>
+     <y>220</y>
+     <width>151</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox{
+color: rgb(255, 255, 255);
+background-color: rgba(55, 62, 93, 200);
+font: 700 9pt &quot;Segoe UI&quot;;
+}
+
+QComboBox::drop-down{
+	width: 15px;
+	color: rgba(255, 255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+QComboBox::down-arrow {
+	border-image: url(:/ComboBox/Resourse/ComboBox/Arrow-Down.png);
+}
+
+QComboBox::down-arrow:on {
+    border-image: url(:/ComboBox/Resourse/ComboBox/Arrow-Up.png);
+}
+
+QComboBox QAbstractItemView{
+  color: rgb(85, 170, 255);	
+  background-color: #373e4e;
+  padding: 10px;
+  selection-background-color: rgb(39, 44, 54);
+}</string>
+   </property>
+  </widget>
+  <zorder>line2</zorder>
+  <zorder>settings_label</zorder>
+  <zorder>line1</zorder>
+  <zorder>checkBox_autoRun</zorder>
+  <zorder>checkBox_rectSize</zorder>
+  <zorder>checkBox_stopFrame</zorder>
+  <zorder>history_size_lineEdit</zorder>
+  <zorder>history_size_label</zorder>
+  <zorder>line</zorder>
+  <zorder>checkBox_screenshotModificationArea</zorder>
+  <zorder>combobox_language</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
