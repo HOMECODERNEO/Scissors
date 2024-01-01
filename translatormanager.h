@@ -16,6 +16,9 @@ public:
 signals:
     void Event_ChangeLanguage(TranslateData data);
 
+private:
+    bool _startProgramFlag = false;
+
 };
 
 #endif // TRANSLATORMANAGER_H

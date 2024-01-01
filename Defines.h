@@ -2,7 +2,7 @@
 #define DEFINES_H
 
 #define APPLICATION_NAME "Scissors"
-#define APPLICATION_VERSION "v1.0.0"
+#define APPLICATION_VERSION "v1.0.1"
 
 #define COLUMN_COUNT 5
 #define ETALON_WIDTH 1080

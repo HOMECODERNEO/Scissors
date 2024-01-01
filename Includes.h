@@ -7,6 +7,7 @@
 #include <QtWin>
 #include <QMenu>
 #include <QLabel>
+#include <QQueue>
 #include <QTimer>
 #include <QPixmap>
 #include <QScreen>
@@ -16,6 +17,7 @@
 #include <QComboBox>
 #include <QClipboard>
 #include <QFileDialog>
+#include <QJsonObject>
 #include <QScrollArea>
 #include <QGridLayout>
 #include <QPushButton>
@@ -23,8 +25,12 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QApplication>
+#include <QNetworkReply>
+#include <QJsonDocument>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QCryptographicHash>
+#include <QNetworkAccessManager>
 /////////////////////////////
 #include <animationsmanager.h> //#include<QWidget, QObject, QPropertyAnimation, QGraphicsOpacityEffect>
 /////////////////////////////

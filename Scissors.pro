@@ -1,4 +1,4 @@
-QT  += core gui winextras
+QT  += core gui winextras network
 LIBS += -lgdi32
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -14,6 +14,7 @@ SOURCES += \
     customhistorybutton.cpp \
     main.cpp \
     mainwindow.cpp \
+    popup.cpp \
     savemanager.cpp \
     screenshotfloatingwindowviewer.cpp \
     screenshothistory.cpp \
@@ -21,7 +22,8 @@ SOURCES += \
     screenshotprocess.cpp \
     screenshotprocesshighlightedarea.cpp \
     settingsform.cpp \
-    translatormanager.cpp
+    translatormanager.cpp \
+    versionchecker.cpp
 
 HEADERS += \
     Defines.h \
@@ -29,6 +31,7 @@ HEADERS += \
     animationsmanager.h \
     customhistorybutton.h \
     mainwindow.h \
+    popup.h \
     savemanager.h \
     screenshotfloatingwindowviewer.h \
     screenshothistory.h \
@@ -36,7 +39,8 @@ HEADERS += \
     screenshotprocess.h \
     screenshotprocesshighlightedarea.h \
     settingsform.h \
-    translatormanager.h
+    translatormanager.h \
+    versionchecker.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

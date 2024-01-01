@@ -3,11 +3,14 @@
 
 #include <Includes.h>
 
+#include <popup.h>
 #include <savemanager.h>
 #include <screenshotprocess.h>
 #include <screenshothistory.h>
 #include <translatormanager.h>
 #include <screenshotfloatingwindowviewer.h>
+
+#include <versionchecker.h>
 
 class MainWindow : public QMainWindow{
     Q_OBJECT
@@ -43,18 +46,24 @@ public slots:
     void CreateFloatingWindow(int, QPixmap);
     void FloatingWindowClose(ScreenshotFloatingWindowViewer* window, int id, QPixmap image);
 
+    void Event_ChangeLanguage(TranslateData data);
+    void ShowPopup(QString text, int time, QString url);
+
 private:
     HHOOK g_hHook = NULL;
 
     QClipboard *_clipboard;
     bool _historyNeedUpdate = false;
+    bool _startProgramMessage = false;
 
     TranslateData _translateData;
     ProgramSetting _programSettings;
     QList<SaveManagerFileData> _imageData;
     QList <ScreenshotFloatingWindowViewer*> m_List_WindowViewer;
 
+    Popup *_popup;
     SaveManager *_saveManager;
+    VersionChecker *_versionChecker;
     ScreenshotProcess *_screenshotProcess;
     ScreenshotHistory *_screenshotHistory;
     TranslatorManager *_translatorManager;

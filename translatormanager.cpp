@@ -1,6 +1,7 @@
 #include "translatormanager.h"
 
 TranslatorManager::TranslatorManager(QObject *parent) : QObject{parent}{
+
 }
 
 void TranslatorManager::TranslatorManager::LoadTranslate(QString lang, QComboBox *box){
@@ -12,11 +13,19 @@ void TranslatorManager::TranslatorManager::LoadTranslate(QString lang, QComboBox
     folder.setNameFilters(QStringList("*.tr"));
 
     // Проходимся по каждому файлу для его добавления в элемент выбора языка
+    box->blockSignals(true);
+
     foreach(QString fileName, folder.entryList())
         box->addItem(fileName.left(fileName.lastIndexOf('.')));
 
+    box->blockSignals(false);
+
     // Выбираем сохранённый язык с настроек
-    box->setCurrentText(lang);
+    if(box->currentText() == lang){
+        TranslateData* container = new TranslateData();
+        ChangeProgramLanguage(container, lang);
+    }else
+        box->setCurrentText(lang);
 }
 
 void TranslatorManager::ChangeProgramLanguage(TranslateData* container, QString lang){
