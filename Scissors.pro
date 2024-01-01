@@ -14,7 +14,7 @@ SOURCES += \
     customhistorybutton.cpp \
     main.cpp \
     mainwindow.cpp \
-    popup.cpp \
+    popupmanager.cpp \
     savemanager.cpp \
     screenshotfloatingwindowviewer.cpp \
     screenshothistory.cpp \
@@ -31,7 +31,7 @@ HEADERS += \
     animationsmanager.h \
     customhistorybutton.h \
     mainwindow.h \
-    popup.h \
+    popupmanager.h \
     savemanager.h \
     screenshotfloatingwindowviewer.h \
     screenshothistory.h \

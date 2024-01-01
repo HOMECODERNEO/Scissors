@@ -419,16 +419,22 @@ QCheckBox::indicator:indeterminate:hover {
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox{
-color: rgb(255, 255, 255);
-background-color: rgba(55, 62, 93, 200);
-font: 700 9pt &quot;Segoe UI&quot;;
+    <string notr="true">QComboBox {
+	border: 1px solid #565a5e;
+	border-radius: 3px;
+	padding: 1px 18px 1px 3px;
+    background-color: #2e3033;
+    color: rgb(255, 255, 255);
 }
 
-QComboBox::drop-down{
-	width: 15px;
-	color: rgba(255, 255, 255, 255);
-    background-color: rgba(0, 0, 0, 0);
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+
+    border-left-width: 1px;
+    border-left-color: #565a5e;
+    border-left-style: solid;
 }
 
 QComboBox::down-arrow {
@@ -436,14 +442,23 @@ QComboBox::down-arrow {
 }
 
 QComboBox::down-arrow:on {
-    border-image: url(:/ComboBox/Resourse/ComboBox/Arrow-Up.png);
+	border-image: url(:/ComboBox/Resourse/ComboBox/Arrow-Up.png);
 }
 
-QComboBox QAbstractItemView{
-  color: rgb(85, 170, 255);	
-  background-color: #373e4e;
-  padding: 10px;
-  selection-background-color: rgb(39, 44, 54);
+QComboBox QAbstractItemView {
+    border: 1px solid #565a5e;
+    border-radius: 3px;
+    background-color: #2e3033;
+    color: rgb(255, 255, 255);
+    selection-background-color: #3e4145;
+}
+
+QComboBox::item {
+    padding: 5px;
+}
+
+QComboBox::item:selected {
+    background-color: #3e4145;
 }</string>
    </property>
   </widget>

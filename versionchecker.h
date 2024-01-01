@@ -17,7 +17,7 @@ private:
     bool isNewerVersionAvailable(const QString &currentVersion, const QString &newVersion);
 
 signals:
-    void ShowPopup(QString text, int time, QString url);
+    void ShowPopup(QString, QString, int, QString);
 
 private:
     QNetworkAccessManager *_networkChecker;

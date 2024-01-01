@@ -141,7 +141,7 @@ class TranslateData{
         }
 
         QString translate(const QString &key){
-            return _language.value(key, "not found");
+            return _language.value(key, "NOT_FOUND");
         }
 
 };

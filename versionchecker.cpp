@@ -25,11 +25,11 @@ void VersionChecker::onReplyFinished(QNetworkReply *reply){
 
         if(isNewerVersionAvailable(currentVersion, newVersion)){
             //Доступна новая версия
-            emit ShowPopup("NEW_VERSION_AVIABLE", 0, "https://github.com/HOMECODERNEO/Scissors/releases");
+            emit ShowPopup("#NEW_VERSION_AVIABLE#: v" + newVersion, "v" + currentVersion, 0, "https://github.com/HOMECODERNEO/Scissors/releases");
         }
 
     }else{
-        // Ошибка reply->errorString();
+        emit ShowPopup("ERROR: " + reply->errorString(), "", 3000, "");
     }
 
     reply->deleteLater();

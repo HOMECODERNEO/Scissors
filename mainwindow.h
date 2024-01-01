@@ -3,7 +3,7 @@
 
 #include <Includes.h>
 
-#include <popup.h>
+#include <popupmanager.h>
 #include <savemanager.h>
 #include <screenshotprocess.h>
 #include <screenshothistory.h>
@@ -47,7 +47,7 @@ public slots:
     void FloatingWindowClose(ScreenshotFloatingWindowViewer* window, int id, QPixmap image);
 
     void Event_ChangeLanguage(TranslateData data);
-    void ShowPopup(QString text, int time, QString url);
+    void ShowPopup(QString text, QString additional, int time, QString url);
 
 private:
     HHOOK g_hHook = NULL;
@@ -61,7 +61,7 @@ private:
     QList<SaveManagerFileData> _imageData;
     QList <ScreenshotFloatingWindowViewer*> m_List_WindowViewer;
 
-    Popup *_popup;
+    PopupManager *_popup;
     SaveManager *_saveManager;
     VersionChecker *_versionChecker;
     ScreenshotProcess *_screenshotProcess;

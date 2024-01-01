@@ -5,7 +5,7 @@ MainWindow *_mainWindowInstance = nullptr;
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent){
     _mainWindowInstance = this;
 
-    _popup = new Popup(this);
+    _popup = new PopupManager(this);
     _clipboard = QApplication::clipboard();
     _versionChecker = new VersionChecker(this);
     _translatorManager = new TranslatorManager(this);
@@ -20,8 +20,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent){
     connect(_screenshotHistory, SIGNAL(CreateFloatingWindow(int, QPixmap)), this, SLOT(CreateFloatingWindow(int, QPixmap)));
     connect(_screenshotHistory->_settingsMenu, SIGNAL(ChangeProgramLanguage(QString)), this, SLOT(ChangeProgramLanguage(QString)));
 
-    connect(_versionChecker, SIGNAL(ShowPopup(QString, int, QString)), this, SLOT(ShowPopup(QString, int, QString)));
+    connect(_versionChecker, SIGNAL(ShowPopup(QString, QString, int, QString)), this, SLOT(ShowPopup(QString, QString, int, QString)));
 
+    connect(_translatorManager, SIGNAL(Event_ChangeLanguage(TranslateData)), _popup, SLOT(Event_ChangeLanguage(TranslateData)));
     connect(_translatorManager, SIGNAL(Event_ChangeLanguage(TranslateData)), this, SLOT(Event_ChangeLanguage(TranslateData)));
     connect(_translatorManager, SIGNAL(Event_ChangeLanguage(TranslateData)), _screenshotHistory, SLOT(Event_ChangeLanguage(TranslateData)));
     connect(_translatorManager, SIGNAL(Event_ChangeLanguage(TranslateData)), _screenshotHistory->_settingsMenu, SLOT(Event_ChangeLanguage(TranslateData)));
@@ -261,12 +262,14 @@ void MainWindow::Event_ChangeLanguage(TranslateData data){
         return;
 
     _startProgramMessage = true;
-    ShowPopup("PROGRAM_START", 3000, "");
+    ShowPopup("#PROGRAM_START#", "", 3000, "");
 }
 
 // Функция вызова уведомление
-void MainWindow::ShowPopup(QString text, int time, QString url){
-    _popup->showMessage(_translateData.translate(text), time, url);
+void MainWindow::ShowPopup(QString text, QString additional, int time, QString url){
+
+    // Отображаем сообщение
+    _popup->showMessage(text, additional, time, url, _translateData);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////// END
