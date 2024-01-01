@@ -3,18 +3,22 @@
 
 #include <Includes.h>
 
-class ScreenshotHistoryViewer : public QWidget{
-    Q_OBJECT
+#include <QMainWindow>
+#include <QWheelEvent>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include <QPropertyAnimation>
+#include <QGraphicsView>
+#include <cmath>
 
-protected:
-    virtual void mousePressEvent(QMouseEvent *pe);
-    virtual void mouseMoveEvent(QMouseEvent *pe);
-    virtual void mouseReleaseEvent(QMouseEvent *pe);
-    virtual void wheelEvent(QWheelEvent * event);
-    virtual void paintEvent(QPaintEvent *);
+class ScreenshotHistoryViewer : public QGraphicsView{
+    Q_OBJECT
 
 signals:
     QScreen* GetActiveScreen();
+
+protected:
+    void wheelEvent(QWheelEvent *event) override;
 
 public:
     explicit ScreenshotHistoryViewer(QWidget *parent = nullptr);
@@ -24,12 +28,18 @@ public:
     void Hide();
 
 private:
-    QPixmap _currentImage;
-    QPoint mousePressPosition;
-    bool _isLeftClick = false, _isVisible = false;
+    void Zoom(float level);
+    void UpdateZoom();
+    void SetMatrix();
+    qreal RotationRadians() const;
 
+private:
+    bool _isVisible = false;
+    float _currentZoomLevel = 0, _oldZoomLevel = 0;
+
+    QGraphicsScene *_scene;
+    QGraphicsPixmapItem* _item;
     AnimationsManager _animationManager;
-
 };
 
 #endif // SCREENSHOTHISTORYVIEWER_H

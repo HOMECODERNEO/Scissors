@@ -9,8 +9,8 @@ class ScreenshotFloatingWindowViewer : public QWidget{
     enum {
         ACTION_NONE,
         ACTION_MOVE,
-        //ACTION_PAINT,
         ACTION_RESIZE_RIGHT_DOWN,
+        ACTION_RESIZE_LEFT_DOWN
     } _action = ACTION_NONE;
 
     enum{
@@ -30,26 +30,22 @@ public slots:
     void updateCursorPositionTimer();
 
 protected:
-    //virtual void closeEvent(QCloseEvent*);
     virtual void paintEvent(QPaintEvent *);
-    virtual void resizeEvent(QResizeEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
-    //virtual void keyPressEvent(QKeyEvent *event);
-    //virtual bool eventFilter(QObject *object, QEvent *event);
 
 signals:
+    QScreen* GetActiveScreen();
     void FloatingWindowClose(ScreenshotFloatingWindowViewer* window, int id, QPixmap image);
 
 private:
     QPainter _painter;
 
     bool _resizeMove = false;
-    bool _resizeIconIsHover = false;
+    byte _resizeIconIsHover = 0;
 
     QTimer *_resizeIconTimer;
-    QRect *_resizeIcon;
 
     int _screenListID = 0;
     QPixmap _currentImage;
@@ -59,7 +55,7 @@ private:
     QString sizeBuffer;
     QSize mousePressDiffFromBorder;
     QRect resizeAccordingly(QMouseEvent*);
-    QPoint mousePressGlobalPosition, mousePressPosition, mouseMovePosition;
+    QPointF mousePressGlobalPosition, mousePressPosition, mouseMovePosition;
     bool snapEdgeToScreenOrClosestFellow(QRect& newRect, const QRect& screen, std::function<void(QRect&,int)> setter, std::function<int(const QRect&)> getter, std::function<int(const QRect&)> oppositeGetter);
     /////////////////////////////// MOUSE WINDOW MOVE
 

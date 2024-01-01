@@ -36,7 +36,6 @@ void TranslatorManager::ChangeProgramLanguage(TranslateData* container, QString 
 
     // Загружаем и читаем файл
     QSettings _lang(loadPath + lang + ".tr", QSettings::IniFormat);
-    _lang.setIniCodec("UTF-8");
 
     QStringList keys = _lang.allKeys();
 

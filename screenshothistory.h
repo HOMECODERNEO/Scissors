@@ -44,6 +44,7 @@ signals:
     QScreen* GetActiveScreen();
     void HistoryRemoveAllItem();
     void HistoryRemoveItem(int index);
+    ProgramSetting GetProgramSettings();
     void RemoveHistoryFile(QString hash);
     QList<SaveManagerFileData> GetImagesData();
     void ScreenshotHistory_ImageCopyToBuffer(int id);
@@ -61,7 +62,7 @@ private:
 
     bool _msgBoxVisible = false;
     QRect *_settingButton, *_exitButton, *_clearHistoryButton;
-    int _buttonIDBuffer = 0, _historyImageButtonsNum = 0;
+    int _buttonIDBuffer = 0, _historyImageButtonsNum = 0, _historyMaxSize = 0;
     bool _exitButtonIsHover = false, _settingButtonIsHover = false, _clearHistoryButtonHover = false;
 
     AnimationsManager _animationManager;

@@ -9,6 +9,7 @@ class VersionChecker : public QObject{
 public:
     explicit VersionChecker(QObject *parent = nullptr);
 
+public slots:
     void check();
 
 private:

@@ -1,11 +1,10 @@
 #include "customhistorybutton.h"
 
+// Конструктор
 CustomHistoryButton::CustomHistoryButton(int id, std::function<void()> leftClick_Func, std::function<void()> middleClick_Func, std::function<void()> rightClick_Func){
     if(id != -1)
         _id = id;
 
-    //////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////
     if(leftClick_Func){
         connect(this, &CustomHistoryButton::clickedLeft, [leftClick_Func](){
             leftClick_Func();
@@ -23,10 +22,9 @@ CustomHistoryButton::CustomHistoryButton(int id, std::function<void()> leftClick
             rightClick_Func();
         });
     }
-    //////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////
 }
 
+// Обработчик нажатий
 void CustomHistoryButton::mousePressEvent(QMouseEvent *e){
     if (e->button() == Qt::LeftButton)
         emit clickedLeft(_id);

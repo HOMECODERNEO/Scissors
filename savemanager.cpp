@@ -1,5 +1,6 @@
 #include "savemanager.h"
 
+// Конструктор
 SaveManager::SaveManager(QObject *parent, std::function<void(byte, QList<SaveManagerFileData>, ProgramSetting)> operationEnd_func) : QObject(parent) {
     if (operationEnd_func){
         connect(this, &SaveManager::OperationEnd, [operationEnd_func](byte type, QList<SaveManagerFileData> _listData, ProgramSetting _programSettings){
@@ -94,6 +95,7 @@ void SaveManager::SaveHistory(QList<SaveManagerFileData> &data){
     }
 }
 
+// Загружаем историю скриншотов
 void SaveManager::LoadHistory(){
     QByteArray readFileData;
     QList<SaveManagerFileData> data;

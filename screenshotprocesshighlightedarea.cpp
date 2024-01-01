@@ -12,7 +12,7 @@ ScreenshotProcessHighlightedArea::ScreenshotProcessHighlightedArea(QWidget *pare
 void ScreenshotProcessHighlightedArea::Show(QRect geometry){
     show();
     setGeometry(geometry);
-    _areaInfoShow = emit GetProgramSettings().Get_ShowScreenshotZoneGeometry();
+    _areaInfoShow = GetProgramSettings().Get_ShowScreenshotZoneGeometry();
 }
 
 void ScreenshotProcessHighlightedArea::Hide(){
@@ -65,9 +65,9 @@ void ScreenshotProcessHighlightedArea::setCursorOnAll(Qt::CursorShape cursor){
 void ScreenshotProcessHighlightedArea::mousePressEvent(QMouseEvent *pe){
 
     mousePressPosition = pe->pos();
-    mousePressGlobalPosition = pe->globalPos();
-    mousePressDiffFromBorder.setWidth(width() - pe->x());
-    mousePressDiffFromBorder.setHeight(height() - pe->y());
+    mousePressGlobalPosition = pe->globalPosition();
+    mousePressDiffFromBorder.setWidth(width() - pe->position().x());
+    mousePressDiffFromBorder.setHeight(height() - pe->position().y());
 
     if(pe->buttons() == Qt::RightButton){
         emit CreateScreenshot(QRect(pos().x(), pos().y(), width(), height()));
@@ -75,29 +75,29 @@ void ScreenshotProcessHighlightedArea::mousePressEvent(QMouseEvent *pe){
     }
 
     if(pe->buttons() == Qt::LeftButton){
-        if (pe->x() < FormBorderWidth && pe->y() < FormBorderWidth){
+        if (pe->position().x() < FormBorderWidth && pe->position().y() < FormBorderWidth){
             _modeAction = ACTION_RESIZE_LEFT_UP;
             setCursorOnAll(Qt::SizeFDiagCursor);
-        }else if (pe->x() < FormBorderWidth && (height() - pe->y()) < FormBorderWidth){
+        }else if (pe->position().x() < FormBorderWidth && (height() - pe->position().y()) < FormBorderWidth){
             _modeAction = ACTION_RESIZE_LEFT_DOWN;
             setCursorOnAll(Qt::SizeBDiagCursor);
-        }else if (pe->y() < FormBorderWidth && (width() - pe->x()) < FormBorderWidth){
+        }else if (pe->position().y() < FormBorderWidth && (width() - pe->position().x()) < FormBorderWidth){
             _modeAction = ACTION_RESIZE_RIGHT_UP;
             setCursorOnAll(Qt::SizeBDiagCursor);
-        }else if ((height() - pe->y()) < FormBorderWidth && (width() - pe->x()) < FormBorderWidth){
+        }else if ((height() - pe->position().y()) < FormBorderWidth && (width() - pe->position().x()) < FormBorderWidth){
             _modeAction = ACTION_RESIZE_RIGHT_DOWN;
             setCursorOnAll(Qt::SizeFDiagCursor);
         }
-        else if (pe->x() < FormBorderWidth){
+        else if (pe->position().x() < FormBorderWidth){
             _modeAction = ACTION_RESIZE_HOR_LEFT;
             setCursorOnAll(Qt::SizeHorCursor);
-        }else if ((width() - pe->x()) < FormBorderWidth){
+        }else if ((width() - pe->position().x()) < FormBorderWidth){
             _modeAction = ACTION_RESIZE_HOR_RIGHT;
             setCursorOnAll(Qt::SizeHorCursor);
-        }else if (pe->y() < FormBorderWidth){
+        }else if (pe->position().y() < FormBorderWidth){
             _modeAction = ACTION_RESIZE_VER_UP;
             setCursorOnAll(Qt::SizeVerCursor);
-        }else if ((height() - pe->y()) < FormBorderWidth){
+        }else if ((height() - pe->position().y()) < FormBorderWidth){
             _modeAction = ACTION_RESIZE_VER_DOWN;
             setCursorOnAll(Qt::SizeVerCursor);
         }else{
@@ -125,12 +125,12 @@ QRect ScreenshotProcessHighlightedArea::resizeAccordingly(QMouseEvent *pe){
             break;
 
         case ACTION_RESIZE_HOR_RIGHT:
-            newWidth = pe->x() + mousePressDiffFromBorder.width();
+            newWidth = pe->position().x() + mousePressDiffFromBorder.width();
             newWidth = (newWidth <= FormMinimumWidth) ? FormMinimumWidth : newWidth;
             break;
 
         case ACTION_RESIZE_VER_DOWN:
-            newHeight = pe->y() + mousePressDiffFromBorder.height();
+            newHeight = pe->position().y() + mousePressDiffFromBorder.height();
             newHeight = (newHeight <= FormMinimumHeight) ? FormMinimumHeight : newHeight;
             break;
 
@@ -138,13 +138,13 @@ QRect ScreenshotProcessHighlightedArea::resizeAccordingly(QMouseEvent *pe){
             newY = pos().y();
             newHeight = height();
 
-            newWidth = mousePressGlobalPosition.x() - pe->globalPos().x() + mousePressPosition.x() + mousePressDiffFromBorder.width();
+            newWidth = mousePressGlobalPosition.x() - pe->globalPosition().x() + mousePressPosition.x() + mousePressDiffFromBorder.width();
 
             if(newWidth < FormMinimumWidth){
                 newWidth = FormMinimumWidth;
                 newX = mousePressGlobalPosition.x() + mousePressDiffFromBorder.width() - FormMinimumWidth;
             }else{
-                newX = pe->globalPos().x() - mousePressPosition.x();
+                newX = pe->globalPosition().x() - mousePressPosition.x();
             }
             break;
 
@@ -152,71 +152,71 @@ QRect ScreenshotProcessHighlightedArea::resizeAccordingly(QMouseEvent *pe){
             newX = pos().x();
             newWidth = width();
 
-            newHeight = mousePressGlobalPosition.y() - pe->globalPos().y() + mousePressPosition.y() + mousePressDiffFromBorder.height();
+            newHeight = mousePressGlobalPosition.y() - pe->globalPosition().y() + mousePressPosition.y() + mousePressDiffFromBorder.height();
 
             if (newHeight < FormMinimumHeight){
                 newHeight = FormMinimumHeight;
                 newY = mousePressGlobalPosition.y() + mousePressDiffFromBorder.height() - FormMinimumHeight;
             }else{
-                newY = pe->globalPos().y() - mousePressPosition.y();
+                newY = pe->globalPosition().y() - mousePressPosition.y();
             }
             break;
 
 
         case ACTION_RESIZE_RIGHT_DOWN:
-            newWidth = pe->x() + mousePressDiffFromBorder.width();
-            newHeight = pe->y() + mousePressDiffFromBorder.height();
+            newWidth = pe->position().x() + mousePressDiffFromBorder.width();
+            newHeight = pe->position().y() + mousePressDiffFromBorder.height();
             newWidth = (newWidth <= FormMinimumWidth) ? FormMinimumWidth : newWidth;
             newHeight = (newHeight <= FormMinimumHeight) ? FormMinimumHeight : newHeight;
             break;
 
         case ACTION_RESIZE_RIGHT_UP:
-            newWidth = pe->x() + mousePressDiffFromBorder.width();
+            newWidth = pe->position().x() + mousePressDiffFromBorder.width();
             if (newWidth < FormMinimumWidth) newWidth = FormMinimumWidth;
             newX = pos().x();
 
-            newHeight = mousePressGlobalPosition.y() - pe->globalPos().y() + mousePressPosition.y() + mousePressDiffFromBorder.height();
+            newHeight = mousePressGlobalPosition.y() - pe->globalPosition().y() + mousePressPosition.y() + mousePressDiffFromBorder.height();
 
             if(newHeight < FormMinimumHeight){
                 newHeight = FormMinimumHeight;
                 newY = mousePressGlobalPosition.y() + mousePressDiffFromBorder.height() - FormMinimumHeight;
             }else{
-                newY = pe->globalPos().y() - mousePressPosition.y();
+                newY = pe->globalPosition().y() - mousePressPosition.y();
             }
             break;
 
         case ACTION_RESIZE_LEFT_DOWN:
-            newHeight = pe->y() + mousePressDiffFromBorder.height();
+            newHeight = pe->position().y() + mousePressDiffFromBorder.height();
             if (newHeight < FormMinimumHeight) newHeight = FormMinimumHeight;
             newY = pos().y();
 
-            newWidth = mousePressGlobalPosition.x() - pe->globalPos().x() + mousePressPosition.x() + mousePressDiffFromBorder.width();
+            newWidth = mousePressGlobalPosition.x() - pe->globalPosition().x() + mousePressPosition.x() + mousePressDiffFromBorder.width();
 
             if(newWidth < FormMinimumWidth){
                 newWidth = FormMinimumWidth;
                 newX = mousePressGlobalPosition.x() + mousePressDiffFromBorder.width() - FormMinimumWidth;
             }else{
-                newX = pe->globalPos().x() - mousePressPosition.x();
+                newX = pe->globalPosition().x() - mousePressPosition.x();
             }
             break;
 
         case ACTION_RESIZE_LEFT_UP:
-            newWidth = mousePressGlobalPosition.x() - pe->globalPos().x() + mousePressPosition.x() + mousePressDiffFromBorder.width();
+            newWidth = mousePressGlobalPosition.x() - pe->globalPosition().x() + mousePressPosition.x() + mousePressDiffFromBorder.width();
 
             if (newWidth < FormMinimumWidth){
                 newWidth = FormMinimumWidth;
                 newX = mousePressGlobalPosition.x() + mousePressDiffFromBorder.width() - FormMinimumWidth;
             }else{
-                newX = pe->globalPos().x() - mousePressPosition.x();
+                newX = pe->globalPosition().x() - mousePressPosition.x();
             }
 
-            newHeight = mousePressGlobalPosition.y() - pe->globalPos().y() + mousePressPosition.y() + mousePressDiffFromBorder.height();
+            newHeight = mousePressGlobalPosition.y() - pe->globalPosition().y() + mousePressPosition.y() + mousePressDiffFromBorder.height();
 
             if(newHeight < FormMinimumHeight){
                 newHeight = FormMinimumHeight;
                 newY = mousePressGlobalPosition.y() + mousePressDiffFromBorder.height() - FormMinimumHeight;
             }else{
-                newY = pe->globalPos().y() - mousePressPosition.y();
+                newY = pe->globalPosition().y() - mousePressPosition.y();
             }
             break;
 
@@ -232,9 +232,9 @@ void ScreenshotProcessHighlightedArea::mouseMoveEvent(QMouseEvent *pe){
         checkAndSetCursors(pe);
 
     else if (_modeAction == ACTION_MOVE){
-        QPoint moveHere;
-        moveHere = pe->globalPos() - mousePressPosition;
-        QRect newRect = QRect(moveHere, geometry().size());
+        QPointF moveHere;
+        moveHere = pe->globalPosition() - mousePressPosition;
+        QRect newRect = QRect(moveHere.toPoint(), geometry().size());
 
         repaint();
         move(newRect.topLeft());
@@ -261,14 +261,14 @@ void ScreenshotProcessHighlightedArea::mouseReleaseEvent(QMouseEvent *pe){
 }
 
 void ScreenshotProcessHighlightedArea::checkAndSetCursors(QMouseEvent *pe){
-    if (pe->x() < FormBorderWidth && pe->y() < FormBorderWidth) { setCursorOnAll(Qt::SizeFDiagCursor); }
-    else if (pe->x() < FormBorderWidth && (height() - pe->y()) < FormBorderWidth){ setCursorOnAll(Qt::SizeBDiagCursor); }
-    else if (pe->y() < FormBorderWidth && (width() - pe->x()) < FormBorderWidth){ setCursorOnAll(Qt::SizeBDiagCursor);}
-    else if ((height() - pe->y()) < FormBorderWidth && (width() - pe->x()) < FormBorderWidth){ setCursorOnAll(Qt::SizeFDiagCursor); }
-    else if (pe->x() < FormBorderWidth){ setCursorOnAll(Qt::SizeHorCursor); }
-    else if ((width() - pe->x()) < FormBorderWidth){ setCursorOnAll(Qt::SizeHorCursor); }
-    else if (pe->y() < FormBorderWidth){ setCursorOnAll(Qt::SizeVerCursor); }
-    else if ((height() - pe->y()) < FormBorderWidth){ setCursorOnAll(Qt::SizeVerCursor); }
+    if (pe->position().x() < FormBorderWidth && pe->position().y() < FormBorderWidth) { setCursorOnAll(Qt::SizeFDiagCursor); }
+    else if (pe->position().x() < FormBorderWidth && (height() - pe->position().y()) < FormBorderWidth){ setCursorOnAll(Qt::SizeBDiagCursor); }
+    else if (pe->position().y() < FormBorderWidth && (width() - pe->position().x()) < FormBorderWidth){ setCursorOnAll(Qt::SizeBDiagCursor);}
+    else if ((height() - pe->position().y()) < FormBorderWidth && (width() - pe->position().x()) < FormBorderWidth){ setCursorOnAll(Qt::SizeFDiagCursor); }
+    else if (pe->position().x() < FormBorderWidth){ setCursorOnAll(Qt::SizeHorCursor); }
+    else if ((width() - pe->position().x()) < FormBorderWidth){ setCursorOnAll(Qt::SizeHorCursor); }
+    else if (pe->position().y() < FormBorderWidth){ setCursorOnAll(Qt::SizeVerCursor); }
+    else if ((height() - pe->position().y()) < FormBorderWidth){ setCursorOnAll(Qt::SizeVerCursor); }
     else setCursorOnAll(Qt::OpenHandCursor);
 }
 

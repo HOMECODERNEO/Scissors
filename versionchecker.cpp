@@ -29,7 +29,7 @@ void VersionChecker::onReplyFinished(QNetworkReply *reply){
         }
 
     }else{
-        emit ShowPopup("ERROR: " + reply->errorString(), "", 3000, "");
+        emit ShowPopup("ERROR: " + reply->errorString(), "", 7000, "");
     }
 
     reply->deleteLater();

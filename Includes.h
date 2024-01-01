@@ -4,11 +4,11 @@
 #include <Defines.h>
 
 #include <QDir>
-#include <QtWin>
 #include <QMenu>
 #include <QLabel>
 #include <QQueue>
 #include <QTimer>
+#include <QThread>
 #include <QPixmap>
 #include <QScreen>
 #include <QBuffer>
@@ -27,7 +27,6 @@
 #include <QApplication>
 #include <QNetworkReply>
 #include <QJsonDocument>
-#include <QDesktopWidget>
 #include <QDesktopServices>
 #include <QCryptographicHash>
 #include <QNetworkAccessManager>

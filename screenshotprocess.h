@@ -32,9 +32,9 @@ public:
     QRect ConvertGlobalCoords(QPoint start, QPoint end);
 
 private:
+    QRect _hightlightAreaGeometry;
     QPixmap _bufferStopFrame;
-    QPoint _mousePressGlobalPositionStart;
-    QRect _lineTop, _lineDown, _lineLeft, _lineRight;
+    QPointF _mousePressGlobalPositionStart;
     bool _mouseLeftPressed = false, _flagStopFrame = false;
 
     AnimationsManager _animationManager;

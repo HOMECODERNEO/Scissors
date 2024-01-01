@@ -20,7 +20,7 @@ class ScreenshotProcessHighlightedArea : public QWidget{
     } _modeAction = ACTION_NONE;
 
     QPoint mousePressPosition;
-    QPoint mousePressGlobalPosition;
+    QPointF mousePressGlobalPosition;
     QSize mousePressDiffFromBorder;
 
     void setCursorOnAll(Qt::CursorShape cursor);

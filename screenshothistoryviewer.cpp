@@ -1,99 +1,113 @@
 #include "screenshothistoryviewer.h"
 
-ScreenshotHistoryViewer::ScreenshotHistoryViewer(QWidget *parent): QWidget{parent}{
+// Конструктор
+ScreenshotHistoryViewer::ScreenshotHistoryViewer(QWidget *parent): QGraphicsView{parent}{
+    setRenderHint(QPainter::Antialiasing, false);
+    setDragMode(QGraphicsView::ScrollHandDrag);
+    setOptimizationFlags(QGraphicsView::DontSavePainterState);
+    setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setInteractive(true);
     setMouseTracking(true);
 
-    setCursor(Qt::OpenHandCursor);
+    _scene = new QGraphicsScene(this);
+    _item = new QGraphicsPixmapItem();
+
+    _scene->addItem(_item);
+    setScene(_scene);
+
+    setStyleSheet("background-color: rgba(1, 1, 1, 200);");
+    setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
 }
 
+// Видимое ли окно
 bool ScreenshotHistoryViewer::IsVisible(){
     return _isVisible;
 }
 
+// Отображаем просмотрщик
 void ScreenshotHistoryViewer::Show(QPixmap image){
+    // Изменяем флаг отображения и сбрасываем предыдущий масштаб
     _isVisible = true;
-    _currentImage = image;
+    _oldZoomLevel = 0;
+    _currentZoomLevel = 0;
 
-    QScreen *screen = emit GetActiveScreen();
+    // Устанавливаем изображение
+    _item->setPixmap(image);
+    _scene->setSceneRect(_item->boundingRect());
 
-    if(screen != nullptr)
-        setGeometry((screen->geometry().width() / 2) - (_currentImage.width() / 2), (screen->geometry().height() / 2) - (_currentImage.height() / 2), _currentImage.width(), _currentImage.height());
+    // Центруем изображение
+    centerOn(mapFromScene(_scene->sceneRect().center().x(), _scene->sceneRect().center().y()));
 
+    // Устанавливаем размер окна на весь экран
+    QScreen *size = emit GetActiveScreen();
+    setGeometry(0, 0, size->geometry().width(), size->geometry().height());
+
+    // Отображаем
     show();
     _animationManager.Create_WindowOpacity(this, nullptr, 100, 0, 1).Start();
 }
 
+// Прячем просмотрщика
 void ScreenshotHistoryViewer::Hide(){
     _isVisible = false;
 
     _animationManager.Create_WindowOpacity(this, [this](){ hide(); }, 100, 1, 0).Start();
 }
 
-void ScreenshotHistoryViewer::mousePressEvent(QMouseEvent *pe){
-    if(pe->buttons() == Qt::LeftButton){
-        _isLeftClick = true;
-        mousePressPosition = pe->pos();
-
-        setCursor(Qt::ClosedHandCursor);
-    }
-}
-
-void ScreenshotHistoryViewer::mouseMoveEvent(QMouseEvent *pe){
-    if(_isLeftClick)
-        move(QRect(pe->globalPos() - mousePressPosition, geometry().size()).topLeft());
-}
-
-void ScreenshotHistoryViewer::mouseReleaseEvent(QMouseEvent *){
-    _isLeftClick = false;
-
-    setCursor(Qt::OpenHandCursor);
-
-    repaint();
-}
-
+// Событие прокрутки колесика мыши
 void ScreenshotHistoryViewer::wheelEvent(QWheelEvent *event){
-    // Получаем текущие размеры окна
-    QRect oldGeometry = this->geometry();
+    const auto d = event->angleDelta();
 
-    // Ограничиваем масштаб, чтобы окно не стало слишком маленьким или слишком большим
-    double scaleChange;
+    if (event->modifiers() == Qt::NoModifier) {
+        auto dm = abs(d.x()) > abs(d.y()) ? d.x() : d.y();
 
-    if (event->angleDelta().y() > 0) {
-        scaleChange = 1.1; // Увеличиваем масштаб на 10%
-    } else {
-        scaleChange = 0.9; // Уменьшаем масштаб на 10%
+        if (dm > 0 && _currentZoomLevel + 4.7 < 100)
+            Zoom(4.7);
+        else if (dm < 0 && _currentZoomLevel - 4.7 > -30)
+            Zoom(-4.7);
+
+        event->accept();
     }
-
-    // Вычисляем новые размеры окна с учетом текущего масштаба
-    int newWidth = static_cast<int>(oldGeometry.width() * scaleChange);
-    int newHeight = static_cast<int>(oldGeometry.height() * scaleChange);
-
-    // Пересчитываем положение окна относительно курсора
-    QPointF cursorPos = event->position();
-    int xOffset = cursorPos.x() - cursorPos.x() * scaleChange;
-    int yOffset = cursorPos.y() - cursorPos.y() * scaleChange;
-
-    // Подгоняем новый размер что бы изображение не поплыло
-    QRect newGeometry = QRect(this->x() + xOffset, this->y() + yOffset, newWidth, newHeight);
-    QSize size = _currentImage.scaled(newGeometry.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation).size();
-    newGeometry.setHeight(size.height());
-    newGeometry.setWidth(size.width());
-
-    // Анимация изменения масштаба
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
-    animation->setDuration(150);
-    animation->setStartValue(oldGeometry);
-    animation->setEndValue(newGeometry);
-    animation->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
-void ScreenshotHistoryViewer::paintEvent(QPaintEvent *){
-    QPainter paint(this);
+// Зумим
+void ScreenshotHistoryViewer::Zoom(float level){
+    _currentZoomLevel += level;
+    SetMatrix();
+}
 
-    paint.setRenderHint(QPainter::Antialiasing);
-    paint.setRenderHint(QPainter::SmoothPixmapTransform);
+// Обновляем масштаб изображения
+void ScreenshotHistoryViewer::UpdateZoom(){
+    qreal newScale = std::pow(2.0, _oldZoomLevel / 10.0);
 
-    paint.drawPixmap(QRect(0, 0, width(), height()), _currentImage);
-    paint.end();
+    QTransform mat;
+    mat.scale(newScale, newScale);
+    mat.rotateRadians(RotationRadians());
+    setTransform(mat);
+}
+
+void ScreenshotHistoryViewer::SetMatrix(){
+
+    QVariantAnimation *animation = new QVariantAnimation;
+    animation->setStartValue(_oldZoomLevel);
+    animation->setEndValue(_currentZoomLevel);
+    animation->setDuration(175);
+    animation->setEasingCurve(QEasingCurve::InOutQuad);
+
+    QObject::connect(animation, &QVariantAnimation::valueChanged, this, [=](const QVariant &value) {
+        _oldZoomLevel = value.toInt();
+
+        UpdateZoom();
+    });
+
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+qreal ScreenshotHistoryViewer::RotationRadians() const{
+    QPointF p = transform().map(QPointF(1., 0.));
+    return std::atan2(p.y(), p.x());
 }

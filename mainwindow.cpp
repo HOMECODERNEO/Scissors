@@ -76,24 +76,24 @@ void MainWindow::ChangeProgramSettings(ProgramSetting settings){
 // Событие окончания выполнения задания от менеджера сохранений
 void MainWindow::SaveManager_OperationsEnd(byte type, QList<SaveManagerFileData> _listData, ProgramSetting settingsData){
     switch(type){
-        case 0:{ // LOAD HISTORY
-            _imageData = _listData;
+    case 0:{ // LOAD HISTORY
+        _imageData = _listData;
 
-            //Если количество больше установленного то удаляем лишнее
-            for(int i = _imageData.count(); i > _programSettings.Get_HistorySize(); i--){
-                _saveManager->RemoveHistoryFile(_imageData[i - 1].GetFileOldName());
-                _imageData.removeAt(i - 1);
-            }
-            break;
+        //Если количество больше установленного то удаляем лишнее
+        for(int i = _imageData.count(); i > _programSettings.Get_HistorySize(); i--){
+            _saveManager->RemoveHistoryFile(_imageData[i - 1].GetFileOldName());
+            _imageData.removeAt(i - 1);
         }
+        break;
+    }
 
-        case 1:{ // LOAD SETTINGS
-            _programSettings = settingsData;
-            _saveManager->LoadHistory();
-            _translatorManager->LoadTranslate(_programSettings.Get_ProgramLanguage(), _screenshotHistory->_settingsMenu->GetLanguageBox());
-            _versionChecker->check();
-            break;
-        }
+    case 1:{ // LOAD SETTINGS
+        _programSettings = settingsData;
+        _saveManager->LoadHistory();
+        _translatorManager->LoadTranslate(_programSettings.Get_ProgramLanguage(), _screenshotHistory->_settingsMenu->GetLanguageBox());
+        _versionChecker->check();
+        break;
+    }
     }
 }
 
@@ -138,7 +138,7 @@ void MainWindow::CreateFloatingWindow(int id, QPixmap image){
 }
 
 // Запрос на закрытие плавающего окна
-void MainWindow::FloatingWindowClose(ScreenshotFloatingWindowViewer* window, int id, QPixmap image){
+void MainWindow::FloatingWindowClose(ScreenshotFloatingWindowViewer* window, int, QPixmap image){
     if(!image.isNull()){
 
     }else{
@@ -152,7 +152,7 @@ bool MainWindow::WinApi_KeyEvent(int keyCode, int modify, int clickCount){
     // modify == Qt::CTRL || Qt::SHIFT
     // clickCount == Number of presses per time
 
-    if(keyCode == Qt::Key_Print && modify == NULL && _currentProcess == NONE){
+    if(keyCode == Qt::Key_Print && modify == 0 && _currentProcess == NONE){
         if(clickCount == 1){
             if(GetProgramSettings().Get_StopFrame()){
                 HDC screenDC = GetDC(0);
@@ -164,7 +164,7 @@ bool MainWindow::WinApi_KeyEvent(int keyCode, int modify, int clickCount){
                 BitBlt(memDC, 0, 0, screenWidth, screenHeight, screenDC, 0, 0, SRCCOPY);
                 hBitmap = (HBITMAP)SelectObject(memDC, hOldBitmap);
 
-                _screenshotProcess->SetStopFrameImage(QtWin::fromHBITMAP(hBitmap));
+                _screenshotProcess->SetStopFrameImage(QPixmap::fromImage(QImage::fromHBITMAP(hBitmap)));
 
                 // Освобождение ресурсов
                 DeleteDC(memDC);
@@ -181,7 +181,7 @@ bool MainWindow::WinApi_KeyEvent(int keyCode, int modify, int clickCount){
         _historyNeedUpdate = false;
     }
 
-    if(keyCode == Qt::Key_Escape && modify == NULL && clickCount == 1 && _currentProcess != NONE){
+    if(keyCode == Qt::Key_Escape && modify == 0 && clickCount == 1 && _currentProcess != NONE){
         if(_currentProcess == SCREENSHOT_CREATE){
             _screenshotProcess->Hide();
             _currentProcess = NONE;
@@ -204,7 +204,7 @@ bool MainWindow::WinApi_KeyEvent(int keyCode, int modify, int clickCount){
 LRESULT CALLBACK MainWindow::GlobalKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam){
 
     static DWORD lastKeyPressTime = 0, lastKeyPress = 0;
-    static int keyPressCount = 0, _keyModify = NULL;
+    static int keyPressCount = 0, _keyModify = 0;
 
     if (nCode >= 0 && wParam == WM_KEYDOWN){
         KBDLLHOOKSTRUCT* pKeyInfo = (KBDLLHOOKSTRUCT*)lParam;
@@ -219,7 +219,7 @@ LRESULT CALLBACK MainWindow::GlobalKeyboardProc(int nCode, WPARAM wParam, LPARAM
             else if(GetAsyncKeyState(VK_SHIFT) & 0x8000)
                 _keyModify = Qt::SHIFT;
             else
-                _keyModify = NULL;
+                _keyModify = 0;
             ///////////////////////////////////////////
 
             if(elapsedTime < 350 && pKeyInfo->vkCode == lastKeyPress/*ЭТО В МЕНЮ НАСТРОЕК, В ДИАПАЗОН ОТ 200 ДО 1000*/)

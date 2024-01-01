@@ -1,5 +1,6 @@
 #include "animationsmanager.h"
 
+// Конструктор
 AnimationsManager::AnimationsManager(QObject *parent): QObject{ parent }{
     Clear();
 }
@@ -9,6 +10,7 @@ AnimationsManager::AnimationsManager(QObject *parent): QObject{ parent }{
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Очистка анимации
 void AnimationsManager::Clear(){
     _animation = nullptr;
     _animationType = NONE;
@@ -19,6 +21,7 @@ void AnimationsManager::Clear(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Создание анимации прозрачности окна
 AnimationsManager& AnimationsManager::Create_WindowOpacity(QWidget *Object, std::function<void()> endAnimation_Func, int duration, int startValue, int endValue){
     if(_animation)
         Clear();
@@ -34,10 +37,12 @@ AnimationsManager& AnimationsManager::Create_WindowOpacity(QWidget *Object, std:
         connect(_animation, &QPropertyAnimation::finished, endAnimation_Func);
 
     _startValue_WindowOpacity = startValue;
+    _animationType = WINDOW_OPACITY;
 
     return *this;
 }
 
+// Создание анимации прозрачности обьекта
 AnimationsManager& AnimationsManager::Create_ObjectOpacity(QWidget *Object, std::function<void()> endAnimation_Func, int duration, int startValue, int endValue){
     if(_animation)
         Clear();
@@ -55,10 +60,12 @@ AnimationsManager& AnimationsManager::Create_ObjectOpacity(QWidget *Object, std:
         connect(_animation, &QPropertyAnimation::finished, endAnimation_Func);
 
     _startValue_ObjectOpacity = startValue;
+    _animationType = OBJECT_OPACITY;
 
     return *this;
 }
 
+// Создание анимации геометрии обьекта
 AnimationsManager& AnimationsManager::Create_ObjectGeometry(QWidget *Object, std::function<void()> endAnimation_Func, int duration, QRect startValue, QRect endValue){
     if(_animation)
         Clear();
@@ -73,6 +80,7 @@ AnimationsManager& AnimationsManager::Create_ObjectGeometry(QWidget *Object, std
         connect(_animation, &QPropertyAnimation::finished, endAnimation_Func);
 
     _startValue_ObjectGeometry = startValue;
+    _animationType = OBJECT_GEOMETRY;
 
     return *this;
 }
@@ -82,16 +90,19 @@ AnimationsManager& AnimationsManager::Create_ObjectGeometry(QWidget *Object, std
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Запуск анимации
 void AnimationsManager::Start(){
     if(_animation != nullptr && _animation->state() == QPropertyAnimation::State::Stopped)
         _animation->start();
 }
 
+// Остановка анимации
 void AnimationsManager::Stop(){
     if(_animation != nullptr && _animation->state() == QPropertyAnimation::Running)
         _animation->stop();
 }
 
+// Перезапуск анимации
 void AnimationsManager::Restart(){
     if(_animation != nullptr){
         Stop();
@@ -107,11 +118,13 @@ void AnimationsManager::Restart(){
     }
 }
 
+// Пауза анимации
 void AnimationsManager::Pause(){
     if(_animation != nullptr && _animation->state() == QPropertyAnimation::Running)
         _animation->pause();
 }
 
+// Снятие анимации с паузы
 void AnimationsManager::Resume(){
     if(_animation != nullptr && _animation->state() == QPropertyAnimation::Paused)
         _animation->resume();
@@ -121,4 +134,3 @@ void AnimationsManager::Resume(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-

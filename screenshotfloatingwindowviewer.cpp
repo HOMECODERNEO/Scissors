@@ -1,45 +1,44 @@
 #include "screenshotfloatingwindowviewer.h"
 
+// Конструктор
 ScreenshotFloatingWindowViewer::ScreenshotFloatingWindowViewer(int id, QPixmap image, QList<ScreenshotFloatingWindowViewer*> *List_WindowViewer, QWidget *parent) : QWidget(parent){
     setWindowTitle("Screenshot");
     setParent(parent);
-
-    _resizeIconTimer = new QTimer();
-
-    //////
-    QScreen *screen = QGuiApplication::primaryScreen();
-    int centreX = (screen->geometry().width() / 2) - (image.width() / 2);
-    int centreY = (screen->geometry().height() / 2) - (image.height() / 2);
-    setGeometry(centreX, centreY, image.width(), image.height());
-    //////
 
     _screenListID = id;
     _currentImage = image;
     m_List_WindowViewer = List_WindowViewer;
 
-    setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
-    setFocusPolicy(Qt::NoFocus);
-    setAttribute(Qt::WA_TranslucentBackground,true);
+    _resizeIconTimer = new QTimer();
+
     setMouseTracking(true);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
 
     connect(_resizeIconTimer, &QTimer::timeout, this, &ScreenshotFloatingWindowViewer::updateCursorPositionTimer);
     connect(this, SIGNAL(FloatingWindowClose(ScreenshotFloatingWindowViewer*, int, QPixmap)), parent, SLOT(FloatingWindowClose(ScreenshotFloatingWindowViewer*, int, QPixmap)));
+    connect(this, SIGNAL(GetActiveScreen()), parent, SLOT(GetActiveScreen()));
+
+    QScreen *screen = emit GetActiveScreen();
+    int centreX = (screen->geometry().width() / 2) - (_currentImage.width() / 2);
+    int centreY = (screen->geometry().height() / 2) - (_currentImage.height() / 2);
+    setGeometry(centreX, centreY, _currentImage.width(), _currentImage.height());
+
+    show();
+    _animationManager.Create_WindowOpacity(this, nullptr, 100, 0, 1).Start();
 
     _resizeIconTimer->start(25);
-
-    _animationManager.Create_WindowOpacity(this, nullptr, 100, 0, 1).Start();
 }
 
-void ScreenshotFloatingWindowViewer::resizeEvent(QResizeEvent *){
-    _resizeIcon = new QRect(width() - 22, height() - 22, 18, 18);
-}
-
+// Событые перерысовки окна
 void ScreenshotFloatingWindowViewer::paintEvent(QPaintEvent*){
     _painter.begin(this);
 
-    // DRAW FRONT IMAGE
+    // Рисуем главное изображение
     _painter.drawPixmap(0, 0, width(), height(), _currentImage.scaled(this->size().width() - 2, this->size().height() - 2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-    _painter.drawPixmap(width() - 22, height() - 22, 18, 18, QPixmap(_resizeIconIsHover ? ":/Buttons/Resourse/Buttons/Resize.png" : ":/Buttons/Resourse/Buttons/Resize_Transparent.png"));
+
+    // Рисуем кнопки по углам для изменения размера
+    _painter.drawPixmap(width() - 22, height() - 22, 18, 18, QPixmap(_resizeIconIsHover == 1 ? ":/Buttons/Resourse/Buttons/Resize.png" : ":/Buttons/Resourse/Buttons/Resize_Transparent.png"));
+    _painter.drawPixmap(5, height() - 22, 18, 18, QPixmap(_resizeIconIsHover == 2 ? ":/Buttons/Resourse/Buttons/Resize.png" : ":/Buttons/Resourse/Buttons/Resize_Transparent.png").transformed(QTransform().rotate(90)));
 
     _painter.setPen(QPen(QColor(255, 238, 88), 2, Qt::SolidLine, Qt::SquareCap));
     _painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
@@ -47,12 +46,16 @@ void ScreenshotFloatingWindowViewer::paintEvent(QPaintEvent*){
     _painter.end();
 }
 
+// Для создания эффекта "HOVER" на нарисованных кнопках, проверяем положение курсора над кнопками
 void ScreenshotFloatingWindowViewer::updateCursorPositionTimer(){
-    if(_resizeIcon->contains(mapFromGlobal(QCursor::pos()))){
-        _resizeIconIsHover = true;
+    if(QRect(width() - 22, height() - 22, 18, 18).contains(mapFromGlobal(QCursor::pos()))){
+        _resizeIconIsHover = 1;
         repaint();
-    }else if(_resizeIconIsHover){
-        _resizeIconIsHover = false;
+    }else if(QRect(5, height() - 22, 18, 18).contains(mapFromGlobal(QCursor::pos()))){
+        _resizeIconIsHover = 2;
+        repaint();
+    }else if(_resizeIconIsHover == 1 || _resizeIconIsHover == 2){
+        _resizeIconIsHover = 0;
         repaint();
     }
 }
@@ -65,16 +68,19 @@ void ScreenshotFloatingWindowViewer::updateCursorPositionTimer(){
 
 void ScreenshotFloatingWindowViewer::mousePressEvent(QMouseEvent *pe){
     mousePressPosition = pe->pos();
-    mousePressGlobalPosition = pe->globalPos();
-    mousePressDiffFromBorder.setWidth(width() - pe->x());
-    mousePressDiffFromBorder.setHeight(height() - pe->y());
+    mousePressGlobalPosition = pe->globalPosition();
+    mousePressDiffFromBorder.setWidth(width() - pe->position().x());
+    mousePressDiffFromBorder.setHeight(height() - pe->position().y());
 
     if (pe->buttons() == Qt::LeftButton){
         _mousePress = MOUSE_LEFT;
 
-        if ((height() - pe->y()) < FormBorderWidth && (width() - pe->x()) < FormBorderWidth){
+        if ((height() - pe->position().y()) < FormBorderWidth && (width() - pe->position().x()) < FormBorderWidth){
             _action = ACTION_RESIZE_RIGHT_DOWN;
             setCursorOnAll(Qt::SizeFDiagCursor);
+        }else if (pe->position().x() < FormBorderWidth && (height() - pe->position().y()) < FormBorderWidth){
+            _action = ACTION_RESIZE_LEFT_DOWN;
+            setCursorOnAll(Qt::SizeBDiagCursor);
         }else{
             _action = ACTION_MOVE;
             setCursorOnAll(Qt::ClosedHandCursor);
@@ -91,7 +97,7 @@ void ScreenshotFloatingWindowViewer::mousePressEvent(QMouseEvent *pe){
 }
 
 void ScreenshotFloatingWindowViewer::mouseMoveEvent(QMouseEvent *pe){
-    QRect screen = QApplication::desktop()->screenGeometry(this);
+    QRect screen = QGuiApplication::primaryScreen()->geometry();
 
     mouseMovePosition = pe->pos();
 
@@ -101,9 +107,9 @@ void ScreenshotFloatingWindowViewer::mouseMoveEvent(QMouseEvent *pe){
     }else if(_mousePress == MOUSE_LEFT && !_resizeMove){
         _resizeMove = true;
     }else if(_action == ACTION_MOVE){
-        QPoint moveHere;
-        moveHere = pe->globalPos() - mousePressPosition;
-        QRect newRect = QRect(moveHere, geometry().size());
+        QPointF moveHere;
+        moveHere = pe->globalPosition() - mousePressPosition;
+        QRect newRect = QRect(moveHere.toPoint(), geometry().size());
         bool snapped;
 
         snapped = snapEdgeToScreenOrClosestFellow(
@@ -140,7 +146,7 @@ void ScreenshotFloatingWindowViewer::mouseMoveEvent(QMouseEvent *pe){
     }else{
         QRect newRect = resizeAccordingly(pe);
 
-        if(_action == ACTION_RESIZE_RIGHT_DOWN){
+        if(_action == ACTION_RESIZE_RIGHT_DOWN || _action == ACTION_RESIZE_LEFT_DOWN){
             snapEdgeToScreenOrClosestFellow(
                 newRect, screen,
                 [](QRect& r, int v) {	r.setBottom(v); },
@@ -182,32 +188,57 @@ QRect ScreenshotFloatingWindowViewer::resizeAccordingly(QMouseEvent *pe){
 
 
         case ACTION_RESIZE_RIGHT_DOWN:
-            newWidth = pe->x() + mousePressDiffFromBorder.width();
-            newHeight = pe->y() + mousePressDiffFromBorder.height();
+            newWidth = pe->position().x() + mousePressDiffFromBorder.width();
+            newHeight = pe->position().y() + mousePressDiffFromBorder.height();
             newWidth = (newWidth <= FormMinimumWidth) ? FormMinimumWidth : newWidth;
             newHeight = (newHeight <= FormMinimumHeight) ? FormMinimumHeight : newHeight;
+
             break;
 
-        default:
+        case ACTION_RESIZE_LEFT_DOWN:
+            newHeight = pe->position().y() + mousePressDiffFromBorder.height();
+
+            if (newHeight < FormMinimumHeight)
+                newHeight = FormMinimumHeight;
+
+            newY = pos().y();
+
+            newWidth = mousePressGlobalPosition.x() - pe->globalPosition().x() + mousePressPosition.x() + mousePressDiffFromBorder.width();
+
+            if(newWidth < FormMinimumWidth){
+                newWidth = FormMinimumWidth;
+
+                newX = mousePressGlobalPosition.x() + mousePressDiffFromBorder.width() - FormMinimumWidth;
+            }else{
+                newX = pe->globalPosition().x() - mousePressPosition.x();
+            }
+
             break;
+
+        default: break;
     }
 
     return QRect(newX, newY, newWidth, newHeight);
 }
 
 void ScreenshotFloatingWindowViewer::checkAndSetCursors(QMouseEvent *pe){
-    if ((height() - pe->y()) < FormBorderWidth && (width() - pe->x()) < FormBorderWidth)
+    if ((height() - pe->position().y()) < FormBorderWidth && (width() - pe->position().x()) < FormBorderWidth)
         setCursorOnAll(Qt::SizeFDiagCursor);
+    else if (pe->position().x() < FormBorderWidth && (height() - pe->position().y()) < FormBorderWidth)
+        setCursorOnAll(Qt::SizeBDiagCursor);
+    else if (pe->position().y() < FormBorderWidth && (width() - pe->position().x()) < FormBorderWidth)
+        setCursorOnAll(Qt::SizeBDiagCursor);
     else
         setCursorOnAll(Qt::OpenHandCursor);
 }
 
+// Эффект магнита к краям экрана и других окон
 bool ScreenshotFloatingWindowViewer::snapEdgeToScreenOrClosestFellow(
     QRect& newRect,
     const QRect& screen,
     std::function<void(QRect&, int)> setter,
     std::function<int(const QRect&)> getter,
-    std::function<int(const QRect&)> oppositeGetter) {
+    std::function<int(const QRect&)> oppositeGetter){
 
     if(abs(getter(newRect) - getter(screen)) < FORM_STIKY_CLOSER_PIXELS){
         setter(newRect, getter(screen));

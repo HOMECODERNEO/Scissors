@@ -1,5 +1,6 @@
 #include "screenshothistory.h"
 
+// Конструктор
 ScreenshotHistory::ScreenshotHistory(QWidget *parent): QWidget{parent}{
     _settingsButtonTimer = new QTimer();
     _settingsMenu = new SettingsForm(this);
@@ -13,6 +14,7 @@ ScreenshotHistory::ScreenshotHistory(QWidget *parent): QWidget{parent}{
     connect(this, SIGNAL(GetImagesData()), parent, SLOT(GetImagesData()));
     connect(this, SIGNAL(ClosingRequest()), parent, SLOT(ClosingRequest()));
     connect(this, SIGNAL(GetActiveScreen()), parent, SLOT(GetActiveScreen()));
+    connect(this, SIGNAL(GetProgramSettings()), parent, SLOT(GetProgramSettings()));
     connect(this, SIGNAL(HistoryRemoveAllItem()), parent, SLOT(HistoryRemoveAllItem()));
     connect(this, SIGNAL(HistoryRemoveItem(int)), parent, SLOT(HistoryRemoveItem(int)));
     connect(this, SIGNAL(ScreenshotHistory_ImageCopyToBuffer(int)), parent, SLOT(ScreenshotHistory_ImageCopyToBuffer(int)));
@@ -43,6 +45,7 @@ ScreenshotHistory::ScreenshotHistory(QWidget *parent): QWidget{parent}{
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Отображение истории
 void ScreenshotHistory::Show(bool needUpdate){
     _settingsButtonTimer->start(25);
 
@@ -52,6 +55,7 @@ void ScreenshotHistory::Show(bool needUpdate){
     _animationManager.Create_WindowOpacity(this, nullptr, 100, 0, 1).Start();
 }
 
+// Скрытие истории
 bool ScreenshotHistory::Hide(){
     if(_screenshotViewer->IsVisible()){
         _screenshotViewer->Hide();
@@ -77,6 +81,7 @@ bool ScreenshotHistory::Hide(){
     return true;
 }
 
+// Событие отрисовки окна
 void ScreenshotHistory::paintEvent(QPaintEvent *){
     QPainter paint(this);
 
@@ -104,6 +109,14 @@ void ScreenshotHistory::paintEvent(QPaintEvent *){
         // Рисуем текст на экране
         paint.drawText((width() - textWidth) / 2, (height() / 2) + (textHeight / 2.5), _text_NoHIstory);
     }
+
+    // Отображаем текущую версию программы
+    QFont font = paint.font();
+    font.setPointSize(12);
+    paint.setFont(font);
+    paint.setPen(QColor(255, 255, 255, 100));
+    paint.drawText(rect().adjusted(0, 0, 0, -10), Qt::AlignHCenter | Qt::AlignBottom, APPLICATION_VERSION);
+    paint.drawText(rect().adjusted(0, 10, 0, 0), Qt::AlignHCenter | Qt::AlignTop, "[" + QString::number(_historyImageButtonsNum) + " / " + QString::number(_historyMaxSize) + "]");
 
     paint.end();
 }
@@ -364,6 +377,7 @@ void ScreenshotHistory::UpdateHistoryGrid(QList<SaveManagerFileData> data, bool 
         return;
 
     _historyImageButtonsNum = data.count();
+    _historyMaxSize = emit GetProgramSettings().Get_HistorySize();
 
     /////////////////////////////////////////////////////// Очистка сетки
     QLayoutItem* item;
@@ -409,8 +423,9 @@ void ScreenshotHistory::UpdateHistoryGrid(QList<SaveManagerFileData> data, bool 
                                       "border-style: solid;"
                                       "}");
 
-                button->setIcon(data[iterator].GetImage());
-                button->setIconSize(QSize(button->width(), button->height()));
+                QPixmap originalPixmap = data[iterator].GetImage();
+                button->setIcon(QIcon(originalPixmap.scaled(button->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+                button->setIconSize(button->size());
 
                 iterator++;
                 gridLayout->addWidget(button, row, col);
@@ -430,6 +445,7 @@ long ScreenshotHistory::MapValue(long x, long in_min, long in_max, long out_min,
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Событие смены языка программы
 void ScreenshotHistory::Event_ChangeLanguage(TranslateData data){
     _text_NoHIstory = data.translate("NO_HISTORY");
     _text_Dialog_HistoryClear = data.translate("CLEAR_HISTORY");
