@@ -8,6 +8,8 @@
         <file>Resourse/Buttons/Clear_Transparent.png</file>
         <file>Resourse/Buttons/Resize.png</file>
         <file>Resourse/Buttons/Resize_Transparent.png</file>
+        <file>Resourse/Buttons/Upload.png</file>
+        <file>Resourse/Buttons/Upload_Transparent.png</file>
     </qresource>
     <qresource prefix="/CheckBox">
         <file>Resourse/CheckBox/CheckBox_Checked.png</file>
@@ -23,5 +25,11 @@
     <qresource prefix="/ComboBox">
         <file>Resourse/ComboBox/Arrow-Down.png</file>
         <file>Resourse/ComboBox/Arrow-Up.png</file>
+    </qresource>
+    <qresource prefix="/sounds">
+        <file>Resourse/Sounds/printscreen.wav</file>
+        <file>Resourse/Sounds/recycle_cleaning.wav</file>
+        <file>Resourse/Sounds/popup.wav</file>
+        <file>Resourse/Sounds/removefile.mp3</file>
     </qresource>
 </RCC>

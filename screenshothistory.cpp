@@ -2,7 +2,7 @@
 
 // Конструктор
 ScreenshotHistory::ScreenshotHistory(QWidget *parent): QWidget{parent}{
-    _settingsButtonTimer = new QTimer();
+    _buttonsHoverTimer = new QTimer();
     _settingsMenu = new SettingsForm(this);
     _screenshotViewer = new ScreenshotHistoryViewer(this);
 
@@ -11,19 +11,26 @@ ScreenshotHistory::ScreenshotHistory(QWidget *parent): QWidget{parent}{
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
 
     // Подключение сигналов
+    connect(parent, SIGNAL(LoadingSettingsEnd(ProgramSetting)), this, SLOT(LoadingSettingsEnd(ProgramSetting)));
+
     connect(this, SIGNAL(GetImagesData()), parent, SLOT(GetImagesData()));
     connect(this, SIGNAL(ClosingRequest()), parent, SLOT(ClosingRequest()));
     connect(this, SIGNAL(GetActiveScreen()), parent, SLOT(GetActiveScreen()));
     connect(this, SIGNAL(GetProgramSettings()), parent, SLOT(GetProgramSettings()));
     connect(this, SIGNAL(HistoryRemoveAllItem()), parent, SLOT(HistoryRemoveAllItem()));
     connect(this, SIGNAL(HistoryRemoveItem(int)), parent, SLOT(HistoryRemoveItem(int)));
+    connect(this, SIGNAL(ScreenshotProcessEnd(QPixmap)), parent, SLOT(ScreenshotProcessEnd(QPixmap)));
+    connect(this, SIGNAL(CreateFloatingWindow(int, QPixmap)), parent, SLOT(CreateFloatingWindow(int, QPixmap)));
+    connect(_settingsMenu, SIGNAL(ChangeProgramLanguage(QString)), parent, SLOT(ChangeProgramLanguage(QString)));
     connect(this, SIGNAL(ScreenshotHistory_ImageCopyToBuffer(int)), parent, SLOT(ScreenshotHistory_ImageCopyToBuffer(int)));
+    connect(this, SIGNAL(ShowPopup(QString, QString, int, QString)), parent, SLOT(ShowPopup(QString, QString, int, QString)));
 
     connect(_screenshotViewer, SIGNAL(GetActiveScreen()), parent, SLOT(GetActiveScreen()));
 
     connect(_settingsMenu, SIGNAL(GetProgramSettings()), parent, SLOT(GetProgramSettings()));
-    connect(_settingsButtonTimer, &QTimer::timeout, this, &ScreenshotHistory::updateCursorPositionTimer);
+    connect(_buttonsHoverTimer, &QTimer::timeout, this, &ScreenshotHistory::updateCursorPositionTimer);
     connect(_settingsMenu, SIGNAL(ChangeProgramSettings(ProgramSetting)), parent, SLOT(ChangeProgramSettings(ProgramSetting)));
+    connect(this, SIGNAL(ChangeProgramSettings(ProgramSetting)), parent, SLOT(ChangeProgramSettings(ProgramSetting)));
 
     // Создаем элементы окна истории
     CreateHistoryUI();
@@ -35,19 +42,29 @@ ScreenshotHistory::ScreenshotHistory(QWidget *parent): QWidget{parent}{
     // Указываем зоны в которых будут нарисованные кнопки
     _settingButton = new QRect(15, 15, 25, 25);
     _exitButton = new QRect(width() - 15 - 25, 15, 25, 25);
-    _clearHistoryButton = new QRect(15, _settingButton->x() + _settingButton->height() + 10, 25, 25);
+    _clearHistoryButton = new QRect(15, _settingButton->y() + _settingButton->height() + 10, 25, 25);
+    _uploadImageButton = new QRect(15, _clearHistoryButton->y() + _clearHistoryButton->height() + 10, 25, 25);
 
-    // Устанавливаем позицию окна настроек программы
-    _settingsMenu->move(QPoint(_settingButton->x() + _settingButton->width() + 7, _settingButton->y()));
+    // Устанавливаем позицию окна настроек программы (если настройки сбились)
+    ProgramSetting settings = emit GetProgramSettings();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+void ScreenshotHistory::LoadingSettingsEnd(ProgramSetting settings){
+
+    // Устанавливаем позицию окна настроек программы (если настройки сбились)
+    if(settings.Get_SettingsWindowGeometry().x() + settings.Get_SettingsWindowGeometry().y() + settings.Get_SettingsWindowGeometry().width() + settings.Get_SettingsWindowGeometry().height() <= 10){
+        settings.Set_SettingsWindowGeometry(QRect(_settingButton->x() + _settingButton->width() + 7, _settingButton->y(), 500, 300));
+        emit ChangeProgramSettings(settings);
+    }
+}
+
 // Отображение истории
 void ScreenshotHistory::Show(bool needUpdate){
-    _settingsButtonTimer->start(25);
+    _buttonsHoverTimer->start(1);
 
     UpdateHistoryGrid(emit GetImagesData(), needUpdate);
 
@@ -67,15 +84,15 @@ bool ScreenshotHistory::Hide(){
         return false;
     }
 
-    // Не даем закрыть пока не выберут действие
-    if(_msgBoxVisible)
+    // Не даем закрыть пока не выберут действие || или же пока открыто окно выбора изображения мы не закроем окно
+    if(_msgBoxVisible || _imageLoadVisible)
         return false;
 
     // Закрываем настройки если они были открыты на момент закрытия истории
     if(_settingsMenu->IsVisible())
         _settingsMenu->Hide();
 
-    _settingsButtonTimer->stop();
+    _buttonsHoverTimer->stop();
     _animationManager.Create_WindowOpacity(this, [this](){ hide(); }, 100, 1, 0).Start();
 
     return true;
@@ -89,10 +106,11 @@ void ScreenshotHistory::paintEvent(QPaintEvent *){
     paint.setBrush(QBrush(QColor(0, 0, 0, 175)));
     paint.drawRect(0, 0, width(), height());
 
-    // Кнопка настроек
+    // Рисуем кнопки
     paint.drawImage(*_settingButton, QImage(_settingButtonIsHover ? ":/Buttons/Resourse/Buttons/Settings.png" : ":/Buttons/Resourse/Buttons/Settings_Transparent.png"));
     paint.drawImage(*_exitButton, QImage(_exitButtonIsHover ? ":/Buttons/Resourse/Buttons/Close.png" : ":/Buttons/Resourse/Buttons/Close_Transparent.png"));
     paint.drawImage(*_clearHistoryButton, QImage(_clearHistoryButtonHover ? ":/Buttons/Resourse/Buttons/Clear.png" : ":/Buttons/Resourse/Buttons/Clear_Transparent.png"));
+    paint.drawImage(*_uploadImageButton, QImage(_uploadImageButtonHover ? ":/Buttons/Resourse/Buttons/Upload.png" : ":/Buttons/Resourse/Buttons/Upload_Transparent.png"));
 
     // Если история пуста, выводим сообщение
     if((emit GetImagesData()).isEmpty()){
@@ -125,19 +143,21 @@ void ScreenshotHistory::mouseReleaseEvent(QMouseEvent *event){
     if(_screenshotViewer->IsVisible())
         return;
 
+    // Нажата кнопка настроек
     if(_settingButton->contains(event->pos())){
 
-        // Нажата кнопка настроек
         if(_settingsMenu->IsVisible())
             _settingsMenu->Hide();
         else
             _settingsMenu->Show();
 
+    // Нажата кнопка закрытия приложения
     }else if(_exitButton->contains(event->pos())){
-        // Нажата кнопка закрытия приложения
 
         _animationManager.Create_WindowOpacity(this, [this](){ emit ClosingRequest(); }, 100, 1, 0);
         _animationManager.Start();
+
+    // Нажата кнопка очистки истории
     }else if(_clearHistoryButton->contains(event->pos())){
 
         QDialog _dialog;
@@ -197,35 +217,91 @@ void ScreenshotHistory::mouseReleaseEvent(QMouseEvent *event){
             // Обновляем сетку
             UpdateHistoryGrid(emit GetImagesData(), true);
         }else _msgBoxVisible = false;
+
+    // Нажата кнопка добавления изображения
+    }else if(_uploadImageButton->contains(event->pos())){
+
+        _imageLoadVisible = true;
+
+        QStringList files = QFileDialog::getOpenFileNames(this, "Выберите изображение", "", "Изображения (*.png *.jpg *.bmp);;Все файлы (*)");
+
+        _imageLoadVisible = false;
+
+        // Записываем количество
+        int count = files.count();
+
+        // Загрузка отменена
+        if(count <= 0){
+            emit ShowPopup("#IMAGE_LOAD_CANCELED#", "", 2000, "");
+            return;
+        }
+
+        // Проходимся по каждому файлу
+        for(const QString& path : files){
+            if(!path.isEmpty()){
+                QPixmap image = QPixmap(path);
+
+                if(!image.isNull()){
+                    emit ScreenshotProcessEnd(image);
+                }else{
+                    // Ошибка загрузки изображения
+                    count--;
+                    emit ShowPopup("ERROR: #IMAGE_LOAD_ERROR#: " + QFileInfo(path).fileName(), "", 3000, "");
+                }
+            }
+        }
+
+        // Обновляем сетку и выводим сообщение
+        UpdateHistoryGrid(emit GetImagesData(), true);
+        emit ShowPopup("#IMAGE_LOADED1#: " + QString::number(count) + " #IMAGE_LOADED2#", "", 2000, "");
     }
 }
 
 // Событие получения позиции курсора (для визуального создания эффекта Hover на нарисованных кнопках)
 void ScreenshotHistory::updateCursorPositionTimer(){
+    bool hover = false;
+
+    hover = _settingButton->contains(QCursor::pos());
+
     // Настройки
-    if(_settingButton->contains(QCursor::pos())){
+    if(hover && !_settingButtonIsHover){
         _settingButtonIsHover = true;
         repaint();
-    }else if(_settingButtonIsHover){
+    }else if(!hover && _settingButtonIsHover){
         _settingButtonIsHover = false;
         repaint();
     }
 
+    hover = _exitButton->contains(QCursor::pos());
+
     // Выход
-    if(_exitButton->contains(QCursor::pos())){
+    if(hover && !_exitButtonIsHover){
         _exitButtonIsHover = true;
         repaint();
-    }else if(_exitButtonIsHover){
+    }else if(!hover && _exitButtonIsHover){
         _exitButtonIsHover = false;
         repaint();
     }
 
+    hover = _clearHistoryButton->contains(QCursor::pos());
+
     // Очистка
-    if(_clearHistoryButton->contains(QCursor::pos())){
+    if(hover && !_clearHistoryButtonHover){
         _clearHistoryButtonHover = true;
         repaint();
-    }else if(_clearHistoryButtonHover){
+    }else if(!hover && _clearHistoryButtonHover){
         _clearHistoryButtonHover = false;
+        repaint();
+    }
+
+    hover = _uploadImageButton->contains(QCursor::pos());
+
+    // Загрузка изображения
+    if(hover && !_uploadImageButtonHover){
+        _uploadImageButtonHover = true;
+        repaint();
+    }else if(!hover && _uploadImageButtonHover){
+        _uploadImageButtonHover = false;
         repaint();
     }
 }
@@ -236,7 +312,7 @@ void ScreenshotHistory::updateCursorPositionTimer(){
 
 // Левый клик по карточке истории с изображением
 void ScreenshotHistory::onLeftClicked(byte id){
-    if(_screenshotViewer->IsVisible())
+    if(_screenshotViewer->IsVisible() || _settingsMenu->IsVisible())
         return;
 
     emit ScreenshotHistory_ImageCopyToBuffer(id);
@@ -244,7 +320,7 @@ void ScreenshotHistory::onLeftClicked(byte id){
 
 // Средний клик по карточке истории с изображением
 void ScreenshotHistory::onMiddleClicked(byte /*id*/){
-    if(_screenshotViewer->IsVisible())
+    if(_screenshotViewer->IsVisible() || _settingsMenu->IsVisible())
         return;
 
     //////// Code
@@ -252,7 +328,7 @@ void ScreenshotHistory::onMiddleClicked(byte /*id*/){
 
 // Правый клик по карточке истории с изображением
 void ScreenshotHistory::onRightClicked(byte id){
-    if(_screenshotViewer->IsVisible())
+    if(_screenshotViewer->IsVisible() || _settingsMenu->IsVisible())
         return;
 
     _buttonIDBuffer = id;
@@ -264,7 +340,7 @@ void ScreenshotHistory::ContextMenuView(){
     if(_screenshotViewer->IsVisible())
         return;
 
-    _screenshotViewer->Show(emit GetImagesData()[_buttonIDBuffer].GetImage());
+    _screenshotViewer->Show(emit GetImagesData()[_buttonIDBuffer].GetImage(), emit GetProgramSettings());
 
     // Если на момент открытия окна просмотра скриншота было открыто окно настроек, делаем его временно не активным
     if(_settingsMenu->IsVisible())
@@ -290,7 +366,12 @@ void ScreenshotHistory::ContextMenuSave(){
     // Если место выбрано то сохраняем выбранное изображение
     if(!filename.isEmpty()){
         QFile file(filename + ".png");
-        emit GetImagesData()[_buttonIDBuffer].GetImage().save(&file, "PNG");
+        bool result = emit GetImagesData()[_buttonIDBuffer].GetImage().save(&file, "PNG");
+
+        if(result)
+            emit ShowPopup("#HISTORY_IMAGE_SAVED#", "", 2000, "");
+        else
+            emit ShowPopup("#HISTORY_IMAGE_SAVE_ERROR#", "", 2000, "");
     }
 }
 
@@ -373,62 +454,64 @@ void ScreenshotHistory::CreateContexMenu(){
 
 // Обновляем сетку истории с изображениями (если появились новые)
 void ScreenshotHistory::UpdateHistoryGrid(QList<SaveManagerFileData> data, bool needUpdate){
-    if(_historyImageButtonsNum == data.count() && !needUpdate)
-        return;
 
-    _historyImageButtonsNum = data.count();
     _historyMaxSize = emit GetProgramSettings().Get_HistorySize();
 
-    /////////////////////////////////////////////////////// Очистка сетки
-    QLayoutItem* item;
+    if(! (_historyImageButtonsNum == data.count() && !needUpdate) ){
 
-    while((item = gridLayout->takeAt(0))){
-        QWidget* widget = item->widget();
+        _historyImageButtonsNum = data.count();
 
-        if (widget)
-            delete widget;
+        /////////////////////////////////////////////////////// Очистка сетки
+        QLayoutItem* item;
 
-        delete item;
-    }
-    /////////////////////////////////////////////////////// Очистка сетки
+        while((item = gridLayout->takeAt(0))){
+            QWidget* widget = item->widget();
 
-    int iterator = 0;
+            if (widget)
+                delete widget;
 
-    int col_num = COLUMN_COUNT;
-    int row_num = _historyImageButtonsNum / COLUMN_COUNT;
+            delete item;
+        }
+        /////////////////////////////////////////////////////// Очистка сетки
 
-    int height = MapValue(emit GetActiveScreen()->geometry().height(), 0, ETALON_WIDTH, 0, 250);
-    int width = MapValue(emit GetActiveScreen()->geometry().width(), 0, ETALON_HEIGHT, 0, 250);
+        int iterator = 0;
 
-    if(row_num * COLUMN_COUNT < _historyImageButtonsNum)
-        row_num++;
+        int col_num = COLUMN_COUNT;
+        int row_num = _historyImageButtonsNum / COLUMN_COUNT;
 
-    for (int row = 0; row < row_num; ++row){
-        for (int col = 0; col < col_num; ++col){
-            if(iterator < _historyImageButtonsNum){
+        int height = MapValue(emit GetActiveScreen()->geometry().height(), 0, ETALON_WIDTH, 0, 250);
+        int width = MapValue(emit GetActiveScreen()->geometry().width(), 0, ETALON_HEIGHT, 0, 250);
 
-                CustomHistoryButton* button = new CustomHistoryButton(0,
-                    [this, iterator](){ onLeftClicked(iterator); },
-                    [this, iterator](){ onMiddleClicked(iterator); },
-                    [this, iterator](){ onRightClicked(iterator); }
-                );
+        if(row_num * COLUMN_COUNT < _historyImageButtonsNum)
+            row_num++;
 
-                button->setFlat(true);
-                button->setFixedSize(width, height);
-                button->setStyleSheet("QPushButton{"
-                                      "color: rgb(255, 255, 255);"
-                                      "background-color: rgba(74, 94, 103,  100);"
-                                      "border-radius: 7px;"
-                                      "border-width: 0px;"
-                                      "border-style: solid;"
-                                      "}");
+        for (int row = 0; row < row_num; ++row){
+            for (int col = 0; col < col_num; ++col){
+                if(iterator < _historyImageButtonsNum){
 
-                QPixmap originalPixmap = data[iterator].GetImage();
-                button->setIcon(QIcon(originalPixmap.scaled(button->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-                button->setIconSize(button->size());
+                    CustomHistoryButton* button = new CustomHistoryButton(0,
+                        [this, iterator](){ onLeftClicked(iterator); },
+                        [this, iterator](){ onMiddleClicked(iterator); },
+                        [this, iterator](){ onRightClicked(iterator); }
+                    );
 
-                iterator++;
-                gridLayout->addWidget(button, row, col);
+                    button->setFlat(true);
+                    button->setFixedSize(width, height);
+                    button->setStyleSheet("QPushButton{"
+                                          "color: rgb(255, 255, 255);"
+                                          "background-color: rgba(74, 94, 103,  100);"
+                                          "border-radius: 7px;"
+                                          "border-width: 0px;"
+                                          "border-style: solid;"
+                                          "}");
+
+                    QPixmap originalPixmap = data[iterator].GetImage();
+                    button->setIcon(QIcon(originalPixmap.scaled(button->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+                    button->setIconSize(button->size());
+
+                    iterator++;
+                    gridLayout->addWidget(button, row, col);
+                }
             }
         }
     }

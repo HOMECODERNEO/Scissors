@@ -1,7 +1,7 @@
 #include "translatormanager.h"
 
 TranslatorManager::TranslatorManager(QObject *parent) : QObject{parent}{
-
+    connect(this, SIGNAL(Event_ChangeLanguage(TranslateData)), parent, SLOT(Event_ChangeLanguage(TranslateData)));
 }
 
 void TranslatorManager::TranslatorManager::LoadTranslate(QString lang, QComboBox *box){

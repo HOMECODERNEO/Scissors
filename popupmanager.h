@@ -39,6 +39,8 @@ private:
 
 signals:
     QScreen* GetActiveScreen();
+    ProgramSetting GetProgramSettings();
+    void PlaySound(QString dir, float volume);
 
 private:
     float _textFade = 0;

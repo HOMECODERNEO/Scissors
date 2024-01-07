@@ -39,7 +39,7 @@ void ScreenshotProcess::SetStopFrameImage(QPixmap image){
 void ScreenshotProcess::CreateScreenshot(QRect rect){
     QRect convert = ConvertGlobalCoords(QPoint(rect.x(), rect.y()), QPoint(rect.x() + rect.width(), rect.y() + rect.height()));
 
-    _animationManager.Create_WindowOpacity(this, [this, convert]() {
+    _animationManager.Create_WindowOpacity(this, [this, convert](){
                             ClearBorderLines();
                             _screenshotHighlightArea->Hide();
                             hide();
@@ -51,7 +51,8 @@ void ScreenshotProcess::CreateScreenshot(QRect rect){
                                 emit ScreenshotProcessEnd(_bufferStopFrame.copy(QRect(convert.x() / scaleX, convert.y() / scaleY, convert.width() / scaleX, convert.height() / scaleY)));
                             }else
                                 emit ScreenshotProcessEnd(GetActiveScreen()->grabWindow(0, convert.x(), convert.y(), convert.width(), convert.height()));
-                         }, 100, 1, 0).Start();
+
+                        }, 100, 1, 0).Start();
 }
 
 void ScreenshotProcess::AreaMove(QRect rect){
@@ -62,24 +63,24 @@ void ScreenshotProcess::AreaMove(QRect rect){
 void ScreenshotProcess::paintEvent(QPaintEvent *){
     QPainter paint(this);
 
-    if (GetProgramSettings().Get_StopFrame() && _flagStopFrame) {
-        // Explicitly set the transformation matrix to handle scaling
+    if (GetProgramSettings().Get_StopFrame() && _flagStopFrame){
         QTransform transform;
+
         transform.scale(static_cast<qreal>(width()) / _bufferStopFrame.width(),
                         static_cast<qreal>(height()) / _bufferStopFrame.height());
+
         paint.setTransform(transform);
 
         paint.drawPixmap(0, 0, _bufferStopFrame);
     }
 
-    // Reset the transformation matrix for subsequent drawing
     paint.resetTransform();
 
     paint.setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::SquareCap));
     paint.setBrush(QBrush(QColor(0, 0, 0, 50)));
     paint.drawRect(0, 0, width(), height());
 
-    paint.setPen(QPen(Qt::red, 1, Qt::SolidLine, Qt::SquareCap));
+    paint.setPen(QPen(Qt::red, 1, Qt::DashLine, Qt::SquareCap));
     paint.setBrush(QBrush(QColor(0, 0, 0, 0)));
     paint.drawRect(_hightlightAreaGeometry);
 }
@@ -123,31 +124,19 @@ void ScreenshotProcess::mouseReleaseEvent(QMouseEvent *event){
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ScreenshotProcess::ClearBorderLines(){
-    _hightlightAreaGeometry = QRect();
+    _hightlightAreaGeometry = QRect(0, 0, 0, 0);
     repaint();
 }
 
 QRect ScreenshotProcess::ConvertGlobalCoords(QPoint start, QPoint end){
-    float x1, y1;
-    float x2, y2;
 
-    if(end.x() > start.x()){
-        x1 = start.x();
-        x2 = end.x() - start.x();
-    }else{
-        x1 = end.x();
-        x2 = start.x() - end.x();
-    }
+    int x = qMin(start.x(), end.x());
+    int y = qMin(start.y(), end.y());
 
-    if(end.y() > start.y()){
-        y1 = start.y();
-        y2 = end.y() - start.y();
-    }else{
-        y1 = end.y();
-        y2 = start.y() - end.y();
-    }
+    int width = qAbs(end.x() - start.x());
+    int height = qAbs(end.y() - start.y());
 
-    return QRect(x1, y1, x2, y2);
+    return QRect(x, y, width, height);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

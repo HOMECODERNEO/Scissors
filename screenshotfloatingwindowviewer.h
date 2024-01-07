@@ -13,13 +13,6 @@ class ScreenshotFloatingWindowViewer : public QWidget{
         ACTION_RESIZE_LEFT_DOWN
     } _action = ACTION_NONE;
 
-    enum{
-        MOUSE_NONE,
-        MOUSE_LEFT,
-        MOUSE_MIDDLE,
-        MOUSE_RIGHT
-    } _mousePress = MOUSE_NONE;
-
 public:
     explicit ScreenshotFloatingWindowViewer(int id, QPixmap image, QList<ScreenshotFloatingWindowViewer*> *List_WindowViewer = NULL, QWidget *parent = nullptr);
 
@@ -41,11 +34,9 @@ signals:
 
 private:
     QPainter _painter;
-
-    bool _resizeMove = false;
-    byte _resizeIconIsHover = 0;
-
     QTimer *_resizeIconTimer;
+
+    byte _resizeIconIsHover = 0;
 
     int _screenListID = 0;
     QPixmap _currentImage;

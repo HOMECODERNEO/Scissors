@@ -9,417 +9,491 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>253</height>
+    <width>563</width>
+    <height>512</height>
    </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(90, 96, 125);</string>
+   <string notr="true">background-color: rgba(0, 0, 0, 0);</string>
   </property>
-  <widget class="QLabel" name="settings_label">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>501</width>
-     <height>41</height>
-    </rect>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
    </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
+   <property name="topMargin">
+    <number>0</number>
    </property>
-   <property name="minimumSize">
-    <size>
-     <width>0</width>
-     <height>0</height>
-    </size>
+   <property name="rightMargin">
+    <number>0</number>
    </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
-font: 900 17pt &quot;Segoe UI&quot;;
-background-color: rgba(255, 255, 255, 0);</string>
+   <property name="bottomMargin">
+    <number>0</number>
    </property>
-   <property name="text">
-    <string>Settings</string>
+   <property name="spacing">
+    <number>0</number>
    </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_autoRun">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>481</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QCheckBox {
-    spacing: 5px;
-    color: rgb(255, 255, 255);
-    background-color: rgba(255, 255, 255, 0);
-    font: 9pt &quot;Segoe UI&quot;;
+   <item row="3" column="0">
+    <widget class="QWidget" name="BarWidget" native="true">
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0, 0);</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="btn_history">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{ 	
+	background-color: rgba(48, 52, 67, 255);
+
+	border-radius: 0px;
+	border-width: 0px;
+	border-style: solid;
 }
 
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
+QPushButton:hover{ 	
+	background-color: rgba(52, 56, 71, 255);
 }
 
-QCheckBox::indicator:unchecked {    
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
-}
-
-QCheckBox::indicator:unchecked:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
-}
-
-QCheckBox::indicator:unchecked:pressed {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
-}
-
-QCheckBox::indicator:checked {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
-}
-
-QCheckBox::indicator:checked:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
-}
-
-QCheckBox::indicator:checked:pressed {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
-}
-
-QCheckBox::indicator:indeterminate:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+QPushButton:pressed{ 
+	background-color: rgba(56, 60, 75, 255);
 }</string>
-   </property>
-   <property name="text">
-    <string>Запуск программы при старте системы</string>
-   </property>
-  </widget>
-  <widget class="Line" name="line1">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>29</y>
-     <width>500</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>0</width>
-     <height>3</height>
-    </size>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
-border-color: rgb(255, 255, 255);
-background-color: rgba(255, 255, 255, 0);</string>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Plain</enum>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_rectSize">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>140</y>
-     <width>481</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QCheckBox {
-    spacing: 5px;
-    color: rgb(255, 255, 255);
-    background-color: rgba(255, 255, 255, 0);
-    font: 9pt &quot;Segoe UI&quot;;
+        </property>
+        <property name="text">
+         <string>History</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="Line" name="line1">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgba(0, 0, 0, 0);</string>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <spacer name="verticalSpacer1">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="Line" name="line3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgba(0, 0, 0, 0);</string>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="btn_general">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{ 	
+	background-color: rgba(48, 52, 67, 255);
+
+	border-radius: 0px;
+	border-width: 0px;
+	border-style: solid;
 }
 
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
+QPushButton:hover{ 	
+	background-color: rgba(52, 56, 71, 255);
 }
 
-QCheckBox::indicator:unchecked {    
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
-}
-
-QCheckBox::indicator:unchecked:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
-}
-
-QCheckBox::indicator:unchecked:pressed {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
-}
-
-QCheckBox::indicator:checked {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
-}
-
-QCheckBox::indicator:checked:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
-}
-
-QCheckBox::indicator:checked:pressed {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
-}
-
-QCheckBox::indicator:indeterminate:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+QPushButton:pressed{ 
+	background-color: rgba(56, 60, 75, 255);
 }</string>
-   </property>
-   <property name="text">
-    <string>Отображать размер и позицию при редактировании зоны</string>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>16</width>
-     <height>16</height>
-    </size>
-   </property>
-  </widget>
-  <widget class="Line" name="line2">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>155</y>
-     <width>500</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>0</width>
-     <height>3</height>
-    </size>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
-border-color: rgb(255, 255, 255);
-background-color: rgba(255, 255, 255, 0);</string>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Plain</enum>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_stopFrame">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>110</y>
-     <width>481</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QCheckBox {
-    spacing: 5px;
-    color: rgb(255, 255, 255);
-    background-color: rgba(255, 255, 255, 0);
-    font: 9pt &quot;Segoe UI&quot;;
+        </property>
+        <property name="text">
+         <string>General</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QPushButton" name="btn_capture">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{ 	
+	background-color: rgba(48, 52, 67, 255);
+
+	border-radius: 0px;
+	border-width: 0px;
+	border-style: solid;
 }
 
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
+QPushButton:hover{ 	
+	background-color: rgba(52, 56, 71, 255);
 }
 
-QCheckBox::indicator:unchecked {    
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
-}
-
-QCheckBox::indicator:unchecked:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
-}
-
-QCheckBox::indicator:unchecked:pressed {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
-}
-
-QCheckBox::indicator:checked {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
-}
-
-QCheckBox::indicator:checked:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
-}
-
-QCheckBox::indicator:checked:pressed {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
-}
-
-QCheckBox::indicator:indeterminate:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+QPushButton:pressed{ 
+	background-color: rgba(56, 60, 75, 255);
 }</string>
-   </property>
-   <property name="text">
-    <string>Использовать Стопкадр при создании скриншота</string>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>16</width>
-     <height>16</height>
-    </size>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="history_size_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>13</x>
-     <y>180</y>
-     <width>51</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 127);
-background-color: rgba(55, 62, 93, 200);
+        </property>
+        <property name="text">
+         <string>Capture</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="Line" name="line2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgba(0, 0, 0, 0);</string>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="Line" name="line4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgba(0, 0, 0, 0);</string>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="btn_sounds">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{ 	
+	background-color: rgba(48, 52, 67, 255);
 
-border-radius: 5px;
-border-width: 0px;
-border-style: solid;</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="history_size_label">
-   <property name="geometry">
-    <rect>
-     <x>75</x>
-     <y>182</y>
-     <width>421</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
+	border-radius: 0px;
+	border-width: 0px;
+	border-style: solid;
+}
+
+QPushButton:hover{ 	
+	background-color: rgba(52, 56, 71, 255);
+}
+
+QPushButton:pressed{ 
+	background-color: rgba(56, 60, 75, 255);
+}</string>
+        </property>
+        <property name="text">
+         <string>Sounds</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QStackedWidget" name="MainWidget">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(48, 52, 67, 200);</string>
+     </property>
+     <property name="currentIndex">
+      <number>2</number>
+     </property>
+     <widget class="QWidget" name="Page_General">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="1" column="0">
+        <widget class="QWidget" name="Widget_Slider1" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_12">
+          <item row="1" column="0">
+           <widget class="QLabel" name="prtsc_timeout_label">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 255, 255);
 background-color: rgba(255, 255, 255, 0);
 font: 9pt &quot;Segoe UI&quot;;</string>
-   </property>
-   <property name="text">
-    <string>Вместимость истории</string>
-   </property>
-  </widget>
-  <widget class="Line" name="line">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>180</y>
-     <width>20</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
-border-color: rgb(255, 255, 255);
-background-color: rgba(255, 255, 255, 0);</string>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Plain</enum>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_screenshotModificationArea">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>481</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QCheckBox {
-    spacing: 5px;
-    color: rgb(255, 255, 255);
-    background-color: rgba(255, 255, 255, 0);
-    font: 9pt &quot;Segoe UI&quot;;
+            </property>
+            <property name="text">
+             <string>Таймаут двойного нажатия кнопки PrtSc</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QWidget" name="Widget_SliderData1" native="true">
+            <layout class="QGridLayout" name="gridLayout_15">
+             <item row="0" column="0">
+              <widget class="QSlider" name="prtsc_timeout_slider">
+               <property name="styleSheet">
+                <string notr="true">QSlider{
+	background: rgba(0, 0, 0, 0);
 }
 
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
+QSlider::groove:horizontal{
+    border: 1px solid #999999;
+    height: 8px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
+    margin: 1px 0;
 }
 
-QCheckBox::indicator:unchecked {    
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+QSlider::handle:horizontal{
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #eeeeee, stop:1 #dddddd);
+    width: 18px;
+    margin: -2px 0;
+    border-radius: 2px;
 }
 
-QCheckBox::indicator:unchecked:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+QSlider::add-page:horizontal{
+    background: rgba(50, 50, 50, 175);
 }
 
-QCheckBox::indicator:unchecked:pressed {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
-}
-
-QCheckBox::indicator:checked {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
-}
-
-QCheckBox::indicator:checked:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
-}
-
-QCheckBox::indicator:checked:pressed {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
-}
-
-QCheckBox::indicator:indeterminate:hover {
-    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+QSlider::sub-page:horizontal{
+    background: rgba(10, 134, 232, 175);
 }</string>
-   </property>
-   <property name="text">
-    <string>Возможность редактирования зоны скриншота</string>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>16</width>
-     <height>16</height>
-    </size>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="combobox_language">
-   <property name="geometry">
-    <rect>
-     <x>171</x>
-     <y>220</y>
-     <width>151</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QComboBox {
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="prtsc_timeout_spinbox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0, 0);</string>
+               </property>
+               <property name="wrapping">
+                <bool>false</bool>
+               </property>
+               <property name="frame">
+                <bool>false</bool>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="accelerated">
+                <bool>false</bool>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="suffix">
+                <string> ms</string>
+               </property>
+               <property name="decimals">
+                <number>0</number>
+               </property>
+               <property name="minimum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>1000.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="stepType">
+                <enum>QAbstractSpinBox::DefaultStepType</enum>
+               </property>
+               <property name="value">
+                <double>200.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QWidget" name="Widget_Language" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(48, 52, 67, 0);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer1">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <widget class="QWidget" name="widget" native="true">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_11">
+             <item row="1" column="0">
+              <widget class="QComboBox" name="combobox_language">
+               <property name="styleSheet">
+                <string notr="true">QComboBox {
 	border: 1px solid #565a5e;
 	border-radius: 3px;
 	padding: 1px 18px 1px 3px;
@@ -460,19 +534,1087 @@ QComboBox::item {
 QComboBox::item:selected {
     background-color: #3e4145;
 }</string>
-   </property>
-  </widget>
-  <zorder>line2</zorder>
-  <zorder>settings_label</zorder>
-  <zorder>line1</zorder>
-  <zorder>checkBox_autoRun</zorder>
-  <zorder>checkBox_rectSize</zorder>
-  <zorder>checkBox_stopFrame</zorder>
-  <zorder>history_size_lineEdit</zorder>
-  <zorder>history_size_label</zorder>
-  <zorder>line</zorder>
-  <zorder>checkBox_screenshotModificationArea</zorder>
-  <zorder>combobox_language</zorder>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="language_label">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);
+font: 9pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>[Language]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QWidget" name="Widget_CheckBox2" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_autoRun">
+            <property name="styleSheet">
+             <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Запуск программы при старте системы</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Page_Sounds">
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="3" column="0">
+        <widget class="QWidget" name="Widget_TimeOut_4" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_21">
+          <item row="1" column="0">
+           <widget class="QLabel" name="delete_file_volume_label">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);
+font: 9pt &quot;Segoe UI&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Громкость удаления файла</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QWidget" name="Widget_SliderData4" native="true">
+            <layout class="QGridLayout" name="gridLayout_22">
+             <item row="0" column="0">
+              <widget class="QSlider" name="volume_delete_file_slider">
+               <property name="styleSheet">
+                <string notr="true">QSlider{
+	background: rgba(0, 0, 0, 0);
+}
+
+QSlider::groove:horizontal{
+    border: 1px solid #999999;
+    height: 8px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
+    margin: 1px 0;
+}
+
+QSlider::handle:horizontal{
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #eeeeee, stop:1 #dddddd);
+    width: 18px;
+    margin: -2px 0;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal{
+    background: rgba(50, 50, 50, 175);
+}
+
+QSlider::sub-page:horizontal{
+    background: rgba(10, 134, 232, 175);
+}</string>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="volume_delete_file_spinbox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0, 0);</string>
+               </property>
+               <property name="wrapping">
+                <bool>false</bool>
+               </property>
+               <property name="frame">
+                <bool>false</bool>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="accelerated">
+                <bool>false</bool>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="decimals">
+                <number>0</number>
+               </property>
+               <property name="minimum">
+                <double>0.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>100.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="stepType">
+                <enum>QAbstractSpinBox::DefaultStepType</enum>
+               </property>
+               <property name="value">
+                <double>100.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <spacer name="verticalSpacer5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QWidget" name="Widget_CheckBox3" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_soundsUse">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Воспроизводить звуки в программе</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QWidget" name="Widget_TimeOut_3" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_17">
+          <item row="1" column="0">
+           <widget class="QLabel" name="history_clear_volume_label">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);
+font: 9pt &quot;Segoe UI&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Громкость очистки корзины</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QWidget" name="Widget_SliderData3" native="true">
+            <layout class="QGridLayout" name="gridLayout_18">
+             <item row="0" column="0">
+              <widget class="QSlider" name="volume_history_clear_slider">
+               <property name="styleSheet">
+                <string notr="true">QSlider{
+	background: rgba(0, 0, 0, 0);
+}
+
+QSlider::groove:horizontal{
+    border: 1px solid #999999;
+    height: 8px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
+    margin: 1px 0;
+}
+
+QSlider::handle:horizontal{
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #eeeeee, stop:1 #dddddd);
+    width: 18px;
+    margin: -2px 0;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal{
+    background: rgba(50, 50, 50, 175);
+}
+
+QSlider::sub-page:horizontal{
+    background: rgba(10, 134, 232, 175);
+}</string>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="volume_history_clear_spinbox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0, 0);</string>
+               </property>
+               <property name="wrapping">
+                <bool>false</bool>
+               </property>
+               <property name="frame">
+                <bool>false</bool>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="accelerated">
+                <bool>false</bool>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="decimals">
+                <number>0</number>
+               </property>
+               <property name="minimum">
+                <double>0.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>100.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="stepType">
+                <enum>QAbstractSpinBox::DefaultStepType</enum>
+               </property>
+               <property name="value">
+                <double>100.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QWidget" name="Widget_Slider2" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_13">
+          <item row="1" column="0">
+           <widget class="QLabel" name="notification_volume_label">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);
+font: 9pt &quot;Segoe UI&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Громкость уведомлений</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QWidget" name="Widget_SliderData2" native="true">
+            <layout class="QGridLayout" name="gridLayout_16">
+             <item row="0" column="0">
+              <widget class="QSlider" name="volume_notification_slider">
+               <property name="styleSheet">
+                <string notr="true">QSlider{
+	background: rgba(0, 0, 0, 0);
+}
+
+QSlider::groove:horizontal{
+    border: 1px solid #999999;
+    height: 8px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
+    margin: 1px 0;
+}
+
+QSlider::handle:horizontal{
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #eeeeee, stop:1 #dddddd);
+    width: 18px;
+    margin: -2px 0;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal{
+    background: rgba(50, 50, 50, 175);
+}
+
+QSlider::sub-page:horizontal{
+    background: rgba(10, 134, 232, 175);
+}</string>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="volume_notification_spinbox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0, 0);</string>
+               </property>
+               <property name="wrapping">
+                <bool>false</bool>
+               </property>
+               <property name="frame">
+                <bool>false</bool>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="accelerated">
+                <bool>false</bool>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="decimals">
+                <number>0</number>
+               </property>
+               <property name="minimum">
+                <double>0.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>100.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="stepType">
+                <enum>QAbstractSpinBox::DefaultStepType</enum>
+               </property>
+               <property name="value">
+                <double>100.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QWidget" name="Widget_TimeOut_5" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_23">
+          <item row="1" column="0">
+           <widget class="QLabel" name="make_screenshot_volume_label">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);
+font: 9pt &quot;Segoe UI&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Громкость создания скриншота</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QWidget" name="Widget_SliderData5" native="true">
+            <layout class="QGridLayout" name="gridLayout_24">
+             <item row="0" column="0">
+              <widget class="QSlider" name="volume_make_screenshot_slider">
+               <property name="styleSheet">
+                <string notr="true">QSlider{
+	background: rgba(0, 0, 0, 0);
+}
+
+QSlider::groove:horizontal{
+    border: 1px solid #999999;
+    height: 8px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
+    margin: 1px 0;
+}
+
+QSlider::handle:horizontal{
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #eeeeee, stop:1 #dddddd);
+    width: 18px;
+    margin: -2px 0;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal{
+    background: rgba(50, 50, 50, 175);
+}
+
+QSlider::sub-page:horizontal{
+    background: rgba(10, 134, 232, 175);
+}</string>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="volume_make_screenshot_spinbox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0, 0);</string>
+               </property>
+               <property name="wrapping">
+                <bool>false</bool>
+               </property>
+               <property name="frame">
+                <bool>false</bool>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="accelerated">
+                <bool>false</bool>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="decimals">
+                <number>0</number>
+               </property>
+               <property name="minimum">
+                <double>0.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>100.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="stepType">
+                <enum>QAbstractSpinBox::DefaultStepType</enum>
+               </property>
+               <property name="value">
+                <double>100.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Page_History">
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="2" column="0">
+        <spacer name="verticalSpacer4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QWidget" name="Widget_LineEdit" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_10">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="history_size_lineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 255, 127);
+background-color: rgba(55, 62, 93, 200);
+
+border-radius: 5px;
+border-width: 0px;
+border-style: solid;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="history_size_label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0);
+font: 9pt &quot;Segoe UI&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Вместимость истории</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QWidget" name="Widget_CheckBox4" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_20">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_viewer_showpercent">
+            <property name="styleSheet">
+             <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Отображать процент масштабирования (Просмотрщик)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Page_Capture">
+      <layout class="QGridLayout" name="gridLayout_14">
+       <item row="0" column="0">
+        <widget class="QWidget" name="Widget_Checkbox1" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 40);
+border-radius: 12px;</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_screenshotModificationArea">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Возможность редактирования зоны скриншота</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="checkBox_rectSize">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Отображать размер и позицию при редактировании зоны</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkBox_stopFrame">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QCheckBox {
+    spacing: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    font: 9pt &quot;Segoe UI&quot;;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked {    
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Checked_Hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Unchecked_Pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/CheckBox/Resourse/CheckBox/CheckBox_Indeterminate.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Использовать Стопкадр при создании скриншота</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <spacer name="verticalSpacer2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="settings_label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+font: 900 17pt &quot;Segoe UI&quot;;
+background-color: rgba(0, 0, 0, 0);</string>
+     </property>
+     <property name="text">
+      <string>Settings</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="Line" name="line5">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0, 0);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

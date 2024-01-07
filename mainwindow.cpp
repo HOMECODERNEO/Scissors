@@ -12,18 +12,16 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent){
     _screenshotProcess = new ScreenshotProcess(this);
     _screenshotHistory = new ScreenshotHistory(this);
 
+    _audioOutput = new QAudioOutput();
+    _mediaPlayer = new QMediaPlayer();
+    _mediaPlayer->setAudioOutput(_audioOutput);
+
     _saveManager = new SaveManager(this, [this](byte type, QList<SaveManagerFileData> _listData, ProgramSetting _programSettings){
         SaveManager_OperationsEnd(type, _listData, _programSettings);
     });
 
     connect(_screenshotHistory, SIGNAL(RemoveHistoryFile(QString)), _saveManager, SLOT(RemoveHistoryFile(QString)));
-    connect(_screenshotHistory, SIGNAL(CreateFloatingWindow(int, QPixmap)), this, SLOT(CreateFloatingWindow(int, QPixmap)));
-    connect(_screenshotHistory->_settingsMenu, SIGNAL(ChangeProgramLanguage(QString)), this, SLOT(ChangeProgramLanguage(QString)));
-
-    connect(_versionChecker, SIGNAL(ShowPopup(QString, QString, int, QString)), this, SLOT(ShowPopup(QString, QString, int, QString)));
-
     connect(_translatorManager, SIGNAL(Event_ChangeLanguage(TranslateData)), _popup, SLOT(Event_ChangeLanguage(TranslateData)));
-    connect(_translatorManager, SIGNAL(Event_ChangeLanguage(TranslateData)), this, SLOT(Event_ChangeLanguage(TranslateData)));
     connect(_translatorManager, SIGNAL(Event_ChangeLanguage(TranslateData)), _screenshotHistory, SLOT(Event_ChangeLanguage(TranslateData)));
     connect(_translatorManager, SIGNAL(Event_ChangeLanguage(TranslateData)), _screenshotHistory->_settingsMenu, SLOT(Event_ChangeLanguage(TranslateData)));
 
@@ -57,6 +55,9 @@ QScreen* MainWindow::GetActiveScreen(){ return QGuiApplication::primaryScreen();
 void MainWindow::HistoryRemoveItem(int index){
     _saveManager->RemoveHistoryFile(_imageData[index].GetFileOldName());
     _imageData.removeAt(index);
+
+    // Проигрываем звук удаления одного файла
+    PlaySound("qrc:/sounds/Resourse/Sounds/removefile.mp3", _programSettings.Get_VolumeDeleteFile() / 100);
 }
 
 // Очищаем весь список истории, а так же удаляем файлы
@@ -65,6 +66,9 @@ void MainWindow::HistoryRemoveAllItem(){
         _saveManager->RemoveHistoryFile(_imageData[index].GetFileOldName());
         _imageData.removeAt(index);
     }
+
+    // Проигрываем звук очистки истории
+    PlaySound("qrc:/sounds/Resourse/Sounds/recycle_cleaning.wav", _programSettings.Get_VolumeHistoryClear() / 100);
 }
 
 // Событие изменения настроек программы
@@ -76,24 +80,27 @@ void MainWindow::ChangeProgramSettings(ProgramSetting settings){
 // Событие окончания выполнения задания от менеджера сохранений
 void MainWindow::SaveManager_OperationsEnd(byte type, QList<SaveManagerFileData> _listData, ProgramSetting settingsData){
     switch(type){
-    case 0:{ // LOAD HISTORY
-        _imageData = _listData;
+        case 0:{ // LOAD HISTORY
+            _imageData = _listData;
 
-        //Если количество больше установленного то удаляем лишнее
-        for(int i = _imageData.count(); i > _programSettings.Get_HistorySize(); i--){
-            _saveManager->RemoveHistoryFile(_imageData[i - 1].GetFileOldName());
-            _imageData.removeAt(i - 1);
+            //Если количество больше установленного то удаляем лишнее
+            for(int i = _imageData.count(); i > _programSettings.Get_HistorySize(); i--){
+                _saveManager->RemoveHistoryFile(_imageData[i - 1].GetFileOldName());
+                _imageData.removeAt(i - 1);
+            }
+            break;
         }
-        break;
-    }
 
-    case 1:{ // LOAD SETTINGS
-        _programSettings = settingsData;
-        _saveManager->LoadHistory();
-        _translatorManager->LoadTranslate(_programSettings.Get_ProgramLanguage(), _screenshotHistory->_settingsMenu->GetLanguageBox());
-        _versionChecker->check();
-        break;
-    }
+        case 1:{ // LOAD SETTINGS
+            _programSettings = settingsData;
+
+            emit LoadingSettingsEnd(_programSettings);
+
+            _saveManager->LoadHistory();
+            _translatorManager->LoadTranslate(_programSettings.Get_ProgramLanguage(), _screenshotHistory->_settingsMenu->GetLanguageBox());
+            _versionChecker->check();
+            break;
+        }
     }
 }
 
@@ -115,7 +122,12 @@ void MainWindow::ScreenshotProcessEnd(QPixmap image){
     _saveManager->SaveHistory(_imageData);
 
     _historyNeedUpdate = true;
-    _currentProcess = NONE;
+
+    if(!_screenshotHistory->isVisible() && !_screenshotProcess->isVisible()){
+        // Проигрываем звук создания скриншота
+        PlaySound("qrc:/sounds/Resourse/Sounds/printscreen.wav", _programSettings.Get_VolumeMakeScreenshot() / 100);
+        _currentProcess = NONE;
+    }
 }
 
 // Левый клик по изображению в истории
@@ -144,6 +156,16 @@ void MainWindow::FloatingWindowClose(ScreenshotFloatingWindowViewer* window, int
     }else{
         m_List_WindowViewer.removeAt(m_List_WindowViewer.indexOf(window));
     }
+}
+
+void MainWindow::PlaySound(QString dir, float volume){
+    if(!_programSettings.Get_UseSound())
+        return;
+
+    _mediaPlayer->setSource(QUrl());
+    _mediaPlayer->setSource(QUrl(dir));
+    _audioOutput->setVolume(volume);
+    _mediaPlayer->play();
 }
 
 // Событие нажатия клавиш с WinApi
@@ -222,7 +244,7 @@ LRESULT CALLBACK MainWindow::GlobalKeyboardProc(int nCode, WPARAM wParam, LPARAM
                 _keyModify = 0;
             ///////////////////////////////////////////
 
-            if(elapsedTime < 350 && pKeyInfo->vkCode == lastKeyPress/*ЭТО В МЕНЮ НАСТРОЕК, В ДИАПАЗОН ОТ 200 ДО 1000*/)
+            if(elapsedTime < static_cast<DWORD>(_mainWindowInstance->_programSettings.Get_PrtSc_Timeout()) && pKeyInfo->vkCode == lastKeyPress/*ЭТО В МЕНЮ НАСТРОЕК, В ДИАПАЗОН ОТ 200 ДО 1000*/)
                 keyPressCount++;
             else
                 keyPressCount = 1;
@@ -237,7 +259,7 @@ LRESULT CALLBACK MainWindow::GlobalKeyboardProc(int nCode, WPARAM wParam, LPARAM
                 lastKeyPressTime = GetTickCount();
 
                 if(_mainWindowInstance->WinApi_KeyEvent(Qt::Key_Escape, _keyModify, keyPressCount))
-                    return 0; // Запрет не работает
+                    return 0;
             }
         }
     }

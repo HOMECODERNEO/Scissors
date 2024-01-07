@@ -22,7 +22,7 @@ void AnimationsManager::Clear(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Создание анимации прозрачности окна
-AnimationsManager& AnimationsManager::Create_WindowOpacity(QWidget *Object, std::function<void()> endAnimation_Func, int duration, int startValue, int endValue){
+AnimationsManager& AnimationsManager::Create_WindowOpacity(QWidget *Object, std::function<void()> endAnimation_Func, int duration, float startValue, float endValue){
     if(_animation)
         Clear();
 
@@ -43,7 +43,7 @@ AnimationsManager& AnimationsManager::Create_WindowOpacity(QWidget *Object, std:
 }
 
 // Создание анимации прозрачности обьекта
-AnimationsManager& AnimationsManager::Create_ObjectOpacity(QWidget *Object, std::function<void()> endAnimation_Func, int duration, int startValue, int endValue){
+AnimationsManager& AnimationsManager::Create_ObjectOpacity(QWidget *Object, std::function<void()> endAnimation_Func, int duration, float startValue, float endValue){
     if(_animation)
         Clear();
 
@@ -83,6 +83,23 @@ AnimationsManager& AnimationsManager::Create_ObjectGeometry(QWidget *Object, std
     _animationType = OBJECT_GEOMETRY;
 
     return *this;
+}
+
+QPropertyAnimation& AnimationsManager::Create_StackedWidgetOpacity(QWidget *widget, std::function<void()> endAnimation_Func, int duration, float startValue, float endValue){
+
+    QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(widget);
+    widget->setGraphicsEffect(opacityEffect);
+
+    QPropertyAnimation *fadeOutAnimation = new QPropertyAnimation(opacityEffect, "opacity");
+    fadeOutAnimation->setDuration(duration);
+    fadeOutAnimation->setStartValue(startValue);
+    fadeOutAnimation->setEndValue(endValue);
+
+    if(endAnimation_Func){
+        connect(fadeOutAnimation, &QPropertyAnimation::finished, endAnimation_Func);
+    }
+
+    return *fadeOutAnimation;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

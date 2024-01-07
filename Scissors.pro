@@ -52,6 +52,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 FORMS += \
     settingsform.ui
 
+CONFIG += resources_big
+
 RESOURCES += \
     Resourse.qrc
 

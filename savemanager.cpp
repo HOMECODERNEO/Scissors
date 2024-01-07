@@ -14,17 +14,49 @@ void SaveManager::SaveSettings(ProgramSetting data){
 
     QSettings PortSetting(QApplication::applicationDirPath() + SETTINGS_DIR + SETTINGS_FILE, QSettings::IniFormat);
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     PortSetting.beginGroup("GENERAL");
     PortSetting.setValue("Startup", data.Get_Startup());
-    PortSetting.setValue("ShowZoneSize", data.Get_ShowScreenshotZoneGeometry());
-    PortSetting.setValue("UseStopFrame", data.Get_StopFrame());
+    PortSetting.setValue("PrtScTimeOut", data.Get_PrtSc_Timeout());
+    PortSetting.setValue("Lang", data.Get_ProgramLanguage());
+    PortSetting.endGroup();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.beginGroup("SOUND");
+    PortSetting.setValue("Sounds", data.Get_UseSound());
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.setValue("Notification", data.Get_VolumeNotification());
+    PortSetting.setValue("HistoryClear", data.Get_VolumeHistoryClear());
+    PortSetting.setValue("DeleteFile", data.Get_VolumeDeleteFile());
+    PortSetting.setValue("MakeScreenshot", data.Get_VolumeMakeScreenshot());
+    PortSetting.endGroup();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.beginGroup("HISTORY");
     PortSetting.setValue("HistorySize", data.Get_HistorySize());
+    PortSetting.setValue("ViewShowPercent", data.Get_ViewerShowPercent());
+    PortSetting.endGroup();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.beginGroup("CAPTURE");
+    PortSetting.setValue("UseStopFrame", data.Get_StopFrame());
+    PortSetting.setValue("ShowZoneSize", data.Get_ShowScreenshotZoneGeometry());
     PortSetting.setValue("ModificationScreenShotArea", data.Get_ShowModificationArea());
     PortSetting.endGroup();
 
-    PortSetting.beginGroup("LANGUAGE");
-    PortSetting.setValue("Lang", data.Get_ProgramLanguage());
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.beginGroup("DATA");
+    PortSetting.setValue("FormSettings", data.Get_SettingsWindowGeometry());
     PortSetting.endGroup();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     PortSetting.sync();
 }
@@ -35,17 +67,47 @@ void SaveManager::LoadSettings(){
     ProgramSetting _settingsData;
     QSettings PortSetting(QApplication::applicationDirPath() + SETTINGS_DIR + SETTINGS_FILE, QSettings::IniFormat);
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     PortSetting.beginGroup("GENERAL");
     _settingsData.Set_Startup(PortSetting.value("Startup", false).toBool());
-    _settingsData.Set_ShowScreenshotZoneGeometry(PortSetting.value("ShowZoneSize", false).toBool());
-    _settingsData.Set_StopFrame(PortSetting.value("UseStopFrame", false).toBool());
-    _settingsData.Set_HistorySize(PortSetting.value("HistorySize", 5).toInt());
-    _settingsData.Set_ShowModificationArea(PortSetting.value("ModificationScreenShotArea", false).toBool());
+    _settingsData.Set_PrtSc_Timeout(PortSetting.value("PrtScTimeOut", 350).toInt());
+    _settingsData.Set_ProgramLanguage(PortSetting.value("Lang", "English").toString());
     PortSetting.endGroup();
 
-    PortSetting.beginGroup("LANGUAGE");
-    _settingsData.Set_ProgramLanguage(PortSetting.value("Lang", "ENG").toString());
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.beginGroup("SOUND");
+    _settingsData.Set_UseSound(PortSetting.value("Sounds", true).toBool());
+
+    _settingsData.Set_VolumeNotification(PortSetting.value("Notification", 50).toFloat());
+    _settingsData.Set_VolumeHistoryClear(PortSetting.value("HistoryClear", 50).toFloat());
+    _settingsData.Set_VolumeDeleteFile(PortSetting.value("DeleteFile", 50).toFloat());
+    _settingsData.Set_VolumeMakeScreenshot(PortSetting.value("MakeScreenshot", 50).toFloat());
     PortSetting.endGroup();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.beginGroup("HISTORY");
+    _settingsData.Set_HistorySize(PortSetting.value("HistorySize", 10).toInt());
+    _settingsData.Set_ViewerShowPercent(PortSetting.value("ViewShowPercent", true).toBool());
+    PortSetting.endGroup();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.beginGroup("CAPTURE");
+    _settingsData.Set_StopFrame(PortSetting.value("UseStopFrame", true).toBool());
+    _settingsData.Set_ShowScreenshotZoneGeometry(PortSetting.value("ShowZoneSize", true).toBool());
+    _settingsData.Set_ShowModificationArea(PortSetting.value("ModificationScreenShotArea", true).toBool());
+    PortSetting.endGroup();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PortSetting.beginGroup("DATA");
+    _settingsData.Set_SettingsWindowGeometry(PortSetting.value("FormSettings", "").toRect());
+    PortSetting.endGroup();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     emit OperationEnd(1, QList<SaveManagerFileData>(), _settingsData);
 }

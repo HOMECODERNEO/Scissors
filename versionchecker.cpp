@@ -3,6 +3,8 @@
 VersionChecker::VersionChecker(QObject *parent): QObject{parent}{
     _networkChecker = new QNetworkAccessManager(this);
     connect(_networkChecker, &QNetworkAccessManager::finished, this, &VersionChecker::onReplyFinished);
+
+    connect(this, SIGNAL(ShowPopup(QString, QString, int, QString)), parent, SLOT(ShowPopup(QString, QString, int, QString)));
 }
 
 void VersionChecker::check(){

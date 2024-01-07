@@ -10,6 +10,8 @@ PopupManager::PopupManager(QWidget *parent): QWidget{parent}{
     connect(_timerTextOpacity, &QTimer::timeout, this, &PopupManager::Timer_TextAnimate);
 
     connect(this, SIGNAL(GetActiveScreen()), parent, SLOT(GetActiveScreen()));
+    connect(this, SIGNAL(PlaySound(QString, float)), parent, SLOT(PlaySound(QString, float)));
+    connect(this, SIGNAL(GetProgramSettings()), parent, SLOT(GetProgramSettings()));
 
     hide();
 }
@@ -32,7 +34,7 @@ void PopupManager::paintEvent(QPaintEvent *){
     paint.drawText(rect(), Qt::AlignCenter, _currentMessage);
 
     // Заголовок сообщения
-    font.setPointSize(7);
+    font.setPointSize(9);
     paint.setFont(font);
     paint.setPen(QColor(255, 124, 112, 255 * _textFade));
     paint.drawText(rect().adjusted(0, 6, 0, 0), Qt::AlignHCenter | Qt::AlignTop, APPLICATION_NAME);
@@ -181,6 +183,9 @@ bool PopupManager::Show(){
     _flagClosed = true;
     _animationManager.Create_ObjectGeometry(this, [this, notification, geometry](){ AnimationEnd(true, notification._displayTime); }, POPUP_ANIMATION_SPEED, geometry, QRect(geometry.x() - geometry.width() - 10, geometry.y(), geometry.width(), geometry.height())).Start();
     _timerTextOpacity->start(3);
+
+    // Воспроизводим звук
+    emit PlaySound("qrc:/sounds/Resourse/Sounds/popup.wav", emit GetProgramSettings().Get_VolumeNotification() / 100);
 
     return true;
 }

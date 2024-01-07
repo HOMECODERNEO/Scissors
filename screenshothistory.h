@@ -22,6 +22,7 @@ private:
     long MapValue(long x, long in_min, long in_max, long out_min, long out_max);
 
 public slots:
+    void LoadingSettingsEnd(ProgramSetting settings);
     void updateCursorPositionTimer();
 
     void ContextMenuView();
@@ -46,9 +47,12 @@ signals:
     void HistoryRemoveItem(int index);
     ProgramSetting GetProgramSettings();
     void RemoveHistoryFile(QString hash);
+    void ScreenshotProcessEnd(QPixmap image);
     QList<SaveManagerFileData> GetImagesData();
+    void ShowPopup(QString, QString, int, QString);
     void ScreenshotHistory_ImageCopyToBuffer(int id);
     void CreateFloatingWindow(int id, QPixmap image);
+    void ChangeProgramSettings(ProgramSetting settings);
 
 public:
     SettingsForm *_settingsMenu;
@@ -58,12 +62,12 @@ private:
 
     QMenu *contextMenu;
     QGridLayout *gridLayout;
-    QTimer *_settingsButtonTimer;
+    QTimer *_buttonsHoverTimer;
 
-    bool _msgBoxVisible = false;
-    QRect *_settingButton, *_exitButton, *_clearHistoryButton;
+    bool _msgBoxVisible = false, _imageLoadVisible = false;
+    QRect *_settingButton, *_exitButton, *_clearHistoryButton, *_uploadImageButton;
     int _buttonIDBuffer = 0, _historyImageButtonsNum = 0, _historyMaxSize = 0;
-    bool _exitButtonIsHover = false, _settingButtonIsHover = false, _clearHistoryButtonHover = false;
+    bool _exitButtonIsHover = false, _settingButtonIsHover = false, _clearHistoryButtonHover = false, _uploadImageButtonHover = false;
 
     AnimationsManager _animationManager;
     ScreenshotHistoryViewer *_screenshotViewer;

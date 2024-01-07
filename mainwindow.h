@@ -29,6 +29,9 @@ public:
 
     static LRESULT CALLBACK GlobalKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 
+signals:
+    void LoadingSettingsEnd(ProgramSetting settings);
+
 public slots:
     void ClosingRequest();
 
@@ -36,6 +39,7 @@ public slots:
     void HistoryRemoveAllItem();
     void HistoryRemoveItem(int index);
     ProgramSetting GetProgramSettings();
+    void PlaySound(QString dir, float volume);
     QList<SaveManagerFileData> GetImagesData();
 
     void ScreenshotProcessEnd(QPixmap image);
@@ -56,6 +60,8 @@ private:
     bool _historyNeedUpdate = false;
     bool _startProgramMessage = false;
 
+    QAudioOutput *_audioOutput;
+    QMediaPlayer *_mediaPlayer;
     TranslateData _translateData;
     ProgramSetting _programSettings;
     QList<SaveManagerFileData> _imageData;

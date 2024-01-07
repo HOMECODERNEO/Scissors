@@ -12,6 +12,7 @@ ScreenshotFloatingWindowViewer::ScreenshotFloatingWindowViewer(int id, QPixmap i
     _resizeIconTimer = new QTimer();
 
     setMouseTracking(true);
+    setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
 
     connect(_resizeIconTimer, &QTimer::timeout, this, &ScreenshotFloatingWindowViewer::updateCursorPositionTimer);
@@ -22,6 +23,8 @@ ScreenshotFloatingWindowViewer::ScreenshotFloatingWindowViewer(int id, QPixmap i
     int centreX = (screen->geometry().width() / 2) - (_currentImage.width() / 2);
     int centreY = (screen->geometry().height() / 2) - (_currentImage.height() / 2);
     setGeometry(centreX, centreY, _currentImage.width(), _currentImage.height());
+
+    this->setFocus();
 
     show();
     _animationManager.Create_WindowOpacity(this, nullptr, 100, 0, 1).Start();
@@ -73,7 +76,6 @@ void ScreenshotFloatingWindowViewer::mousePressEvent(QMouseEvent *pe){
     mousePressDiffFromBorder.setHeight(height() - pe->position().y());
 
     if (pe->buttons() == Qt::LeftButton){
-        _mousePress = MOUSE_LEFT;
 
         if ((height() - pe->position().y()) < FormBorderWidth && (width() - pe->position().x()) < FormBorderWidth){
             _action = ACTION_RESIZE_RIGHT_DOWN;
@@ -104,8 +106,6 @@ void ScreenshotFloatingWindowViewer::mouseMoveEvent(QMouseEvent *pe){
     if(_action == ACTION_NONE){
         checkAndSetCursors(pe);
 
-    }else if(_mousePress == MOUSE_LEFT && !_resizeMove){
-        _resizeMove = true;
     }else if(_action == ACTION_MOVE){
         QPointF moveHere;
         moveHere = pe->globalPosition() - mousePressPosition;
@@ -164,8 +164,6 @@ void ScreenshotFloatingWindowViewer::mouseMoveEvent(QMouseEvent *pe){
 }
 
 void ScreenshotFloatingWindowViewer::mouseReleaseEvent(QMouseEvent *pe){
-    _resizeMove = false;
-    _mousePress = MOUSE_NONE;
     _action = ACTION_NONE;
 
     checkAndSetCursors(pe);
