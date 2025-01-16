@@ -14,7 +14,7 @@ class ScreenshotFloatingWindowViewer : public QWidget{
     } _action = ACTION_NONE;
 
 public:
-    explicit ScreenshotFloatingWindowViewer(int id, QPixmap image, QList<ScreenshotFloatingWindowViewer*> *List_WindowViewer = NULL, QWidget *parent = nullptr);
+    explicit ScreenshotFloatingWindowViewer(QPixmap image, QList<ScreenshotFloatingWindowViewer*> *List_WindowViewer = NULL, QWidget *parent = nullptr);
 
     void setCursorOnAll(Qt::CursorShape);
     void checkAndSetCursors(QMouseEvent*);
@@ -26,11 +26,12 @@ protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mousePressEvent(QMouseEvent*);
+    virtual void wheelEvent(QWheelEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent*);
 
 signals:
-    QScreen* GetActiveScreen();
-    void FloatingWindowClose(ScreenshotFloatingWindowViewer* window, int id, QPixmap image);
+    QRect GetCurrentScreenGeometry();
+    void FloatingWindowClose(ScreenshotFloatingWindowViewer* window);
 
 private:
     QPainter _painter;
@@ -38,7 +39,6 @@ private:
 
     byte _resizeIconIsHover = 0;
 
-    int _screenListID = 0;
     QPixmap _currentImage;
     QList <ScreenshotFloatingWindowViewer*> *m_List_WindowViewer;
 

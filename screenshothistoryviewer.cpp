@@ -43,18 +43,35 @@ void ScreenshotHistoryViewer::Show(QPixmap image, ProgramSetting settings){
     centerOn(mapFromScene(_scene->sceneRect().center().x(), _scene->sceneRect().center().y()));
 
     // Устанавливаем размер окна на весь экран
-    QScreen *size = emit GetActiveScreen();
-    setGeometry(0, 0, size->geometry().width(), size->geometry().height());
+    QRect screenRect = emit GetCurrentScreenGeometry();
+    setGeometry(0, 0, screenRect.width(), screenRect.height());
     _percent->setGeometry((geometry().width() / 2) - 50, (geometry().height() / 2) - 50, 100, 100);
 
-    // Сбрасываем предыдущий масштаб
-    _currentZoomLevel = 0;
-    _oldZoomLevel = 0;
+    // Calculate the initial scale factor and set the zoom levels
+    qreal initialScaleFactor = CalculateInitialScaleFactor(image);
+    _currentZoomLevel = std::log2(initialScaleFactor) * 10;
+    _oldZoomLevel = _currentZoomLevel;
     UpdateZoom();
 
     // Отображаем
     show();
     _animationManager.Create_WindowOpacity(this, nullptr, 100, 0, 1).Start();
+}
+
+// Заменяем текущую картинку на другую
+void ScreenshotHistoryViewer::ChangePixmap(QPixmap image){
+    // Устанавливаем новое изображение
+    _item->setPixmap(image);
+    _scene->setSceneRect(_item->boundingRect());
+
+    // Центруем изображение
+    centerOn(mapFromScene(_scene->sceneRect().center().x(), _scene->sceneRect().center().y()));
+
+    // Calculate the initial scale factor and set the zoom levels
+    qreal initialScaleFactor = CalculateInitialScaleFactor(image);
+    _currentZoomLevel = std::log2(initialScaleFactor) * 10;
+    _oldZoomLevel = _currentZoomLevel;
+    UpdateZoom();
 }
 
 // Прячем просмотрщика
@@ -120,7 +137,7 @@ void ScreenshotHistoryViewer::UpdateZoom(){
 
 void ScreenshotHistoryViewer::ZoomAnimationStep(){
     // Удаляем если достигли необходимого значения
-    if (FloatCompare(_oldZoomLevel, _currentZoomLevel) || (_oldZoomLevel + _zoomStepSize) >= 100 || (_oldZoomLevel + _zoomStepSize <= -30)){
+    if (FloatCompare(_oldZoomLevel, _currentZoomLevel) || (_oldZoomLevel + _zoomStepSize) >= 100 || (_oldZoomLevel + _zoomStepSize <= -100)){
         _zoomTimer->stop();
         disconnect(_zoomTimer, &QTimer::timeout, this, &ScreenshotHistoryViewer::ZoomAnimationStep);
         _zoomTimer->deleteLater();
@@ -134,6 +151,17 @@ void ScreenshotHistoryViewer::ZoomAnimationStep(){
     _oldZoomLevel += _zoomStepSize;
     _percent->setValue(_oldZoomLevel);
     UpdateZoom();
+}
+
+qreal ScreenshotHistoryViewer::CalculateInitialScaleFactor(const QPixmap &image){
+    QRect screenRect = emit GetCurrentScreenGeometry();
+    QSize screenSize = screenRect.size();
+    QSize imageSize = image.size();
+
+    qreal widthRatio = static_cast<qreal>(screenSize.width()) / (imageSize.width() * 2);
+    qreal heightRatio = static_cast<qreal>(screenSize.height()) / (imageSize.height() * 2);
+
+    return qMin(widthRatio, heightRatio);
 }
 
 // Коректно сравниваем 2 float2 числа

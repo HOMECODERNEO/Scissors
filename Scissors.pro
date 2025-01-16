@@ -1,5 +1,6 @@
 QT  += core gui network multimedia
 LIBS += -lgdi32
+LIBS += -ld3d11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,7 +14,6 @@ LIBS += -LC:\Qt\Tools\OpenSSLv3\Win_x64\lib\libssl.lib
 
 SOURCES += \
     animationsmanager.cpp \
-    customhistorybutton.cpp \
     main.cpp \
     mainwindow.cpp \
     popupmanager.cpp \
@@ -23,15 +23,15 @@ SOURCES += \
     screenshothistoryviewer.cpp \
     screenshotprocess.cpp \
     screenshotprocesshighlightedarea.cpp \
+    screenshotprocesstoolpopup.cpp \
     settingsform.cpp \
-    translatormanager.cpp \
-    versionchecker.cpp
+    soundmanager.cpp
 
 HEADERS += \
     Defines.h \
+    DrawData.h \
     Includes.h \
     animationsmanager.h \
-    customhistorybutton.h \
     mainwindow.h \
     popupmanager.h \
     savemanager.h \
@@ -40,9 +40,9 @@ HEADERS += \
     screenshothistoryviewer.h \
     screenshotprocess.h \
     screenshotprocesshighlightedarea.h \
+    screenshotprocesstoolpopup.h \
     settingsform.h \
-    translatormanager.h \
-    versionchecker.h
+    soundmanager.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -50,6 +50,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 FORMS += \
+    screenshotprocesstoolpopup.ui \
     settingsform.ui
 
 CONFIG += resources_big

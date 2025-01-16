@@ -10,6 +10,54 @@
 #include <QPropertyAnimation>
 #include <QGraphicsView>
 
+// Кастомные классы которые описаные в этом заголовочном файле ниже основного класа
+class Percent;
+
+class ScreenshotHistoryViewer : public QGraphicsView{
+    Q_OBJECT
+
+signals:
+    QRect GetCurrentScreenGeometry();
+
+protected:
+    void wheelEvent(QWheelEvent *event);
+
+public:
+    explicit ScreenshotHistoryViewer(QWidget *parent = nullptr);
+
+    bool IsVisible();
+    void Show(QPixmap image, ProgramSetting settings);
+    void ChangePixmap(QPixmap image);
+    void Hide();
+
+private slots:
+    void ZoomAnimationStep();
+
+private:
+    void UpdateZoom();
+    void Zoom(float level);
+    bool FloatCompare(float f1, float f2) const;
+    qreal CalculateInitialScaleFactor(const QPixmap &image);
+
+private:
+    bool _isVisible = false;
+    float _currentZoomLevel = 0, _oldZoomLevel = 0;
+
+    QTimer *_zoomTimer;
+    float _zoomStepSize;
+    QPointF _lastCursorPosition;
+
+    Percent *_percent;
+
+    QGraphicsScene *_scene;
+    QGraphicsPixmapItem* _item;
+    AnimationsManager _animationManager;
+};
+
+//////////////////////////////////////////////////////////////////////////
+///////////////////////////////// PERCENT ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
 class Percent : public QWidget{
     Q_OBJECT
 
@@ -85,45 +133,6 @@ private:
     bool _active = false;
 
     QTimer *_showTimer;
-    AnimationsManager _animationManager;
-};
-
-class ScreenshotHistoryViewer : public QGraphicsView{
-    Q_OBJECT
-
-signals:
-    QScreen* GetActiveScreen();
-
-protected:
-    void wheelEvent(QWheelEvent *event);
-
-public:
-    explicit ScreenshotHistoryViewer(QWidget *parent = nullptr);
-
-    bool IsVisible();
-    void Show(QPixmap image, ProgramSetting settings);
-    void Hide();
-
-private slots:
-    void ZoomAnimationStep();
-
-private:
-    void UpdateZoom();
-    void Zoom(float level);
-    bool FloatCompare(float f1, float f2) const;
-
-private:
-    bool _isVisible = false;
-    float _currentZoomLevel = 0, _oldZoomLevel = 0;
-
-    QTimer *_zoomTimer;
-    float _zoomStepSize;
-    QPointF _lastCursorPosition;
-
-    Percent *_percent;
-
-    QGraphicsScene *_scene;
-    QGraphicsPixmapItem* _item;
     AnimationsManager _animationManager;
 };
 

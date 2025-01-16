@@ -2,32 +2,71 @@
 
 ScreenshotProcess::ScreenshotProcess(QWidget *parent): QWidget(parent){
 
+    _screenshotProcessTools = new ScreenshotProcessToolPopup(this);
     _screenshotHighlightArea = new ScreenshotProcessHighlightedArea(this);
 
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
 
-    connect(this, SIGNAL(GetActiveScreen()), parent, SLOT(GetActiveScreen()));
-    connect(this, SIGNAL(GetProgramSettings()), parent, SLOT(GetProgramSettings()));
-    connect(this, SIGNAL(ScreenshotProcessEnd(QPixmap)), parent, SLOT(ScreenshotProcessEnd(QPixmap)));
     connect(_screenshotHighlightArea, SIGNAL(GetProgramSettings()), parent, SLOT(GetProgramSettings()));
+    connect(_screenshotHighlightArea, SIGNAL(GetCurrentScreenGeometry()), parent, SLOT(GetCurrentScreenGeometry()));
+    connect(_screenshotHighlightArea, &ScreenshotProcessHighlightedArea::AreaMove, this, &ScreenshotProcess::AreaMove);
+    connect(_screenshotHighlightArea, &ScreenshotProcessHighlightedArea::CreateScreenshot, this, &ScreenshotProcess::CreateScreenshot);
 
-    setGeometry(emit GetActiveScreen()->geometry());
+    connect(_screenshotProcessTools, SIGNAL(GetCurrentScreenGeometry()), parent, SLOT(GetCurrentScreenGeometry()));
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::GetPenData, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::GetPenData);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::GetLineData, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::GetLineData);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::SetDrawMode, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::SetDrawMode);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::GetDrawMode, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::GetDrawMode);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::ClearDrawArea, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::ClearDrawArea);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::GetEraserData, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::GetEraserData);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::GetFigureData, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::GetFigureData);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::Update_PenData, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::UpdateToolPanel_PenData);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::Update_LineData, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::UpdateToolPanel_LineData);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::Update_EraserData, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::UpdateToolPanel_EraserData);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::Update_FigureData, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::UpdateToolPanel_FigureData);
+    connect(_screenshotProcessTools, &ScreenshotProcessToolPopup::LineCapInit, _screenshotHighlightArea, &ScreenshotProcessHighlightedArea::LineCapInit);
+
+    _screenshotHighlightArea->Hide();
     setFocus();
 }
 
+ScreenshotProcessToolPopup* ScreenshotProcess::GetToolPopup() const { return _screenshotProcessTools; }
+ScreenshotProcessHighlightedArea* ScreenshotProcess::GetHighlightedArea() const { return _screenshotHighlightArea; }
+
 void ScreenshotProcess::Show(){
+    emit ProcessEvent_ShowStart();
+
+    setGeometry(emit GetCurrentScreenGeometry());
+
     show();
-    _animationManager.Create_WindowOpacity(this, [this](){ repaint(); }, 100, 0, 1).Start();
+    _animationManager.Create_WindowOpacity(this, [this](){
+
+        repaint();
+        emit ProcessEvent_ShowEnd(this);
+    }, 100, 0, 1).Start();
+
+    _screenshotProcessTools->Show();
+
+    activateWindow();
 }
 
-void ScreenshotProcess::Hide(){
+bool ScreenshotProcess::Hide(){
+    emit ProcessEvent_HideStart();
+
+    _screenshotProcessTools->Hide();
+
     _animationManager.Create_WindowOpacity(this, [this](){
                                                             _flagStopFrame = false;
                                                             ClearBorderLines();
+
                                                             _screenshotHighlightArea->Hide();
                                                             hide();
+
+                                                            emit ProcessEvent_HideEnd();
                                                         }, 100, 1, 0).Start();
+
+    return true;
 }
 
 void ScreenshotProcess::SetStopFrameImage(QPixmap image){
@@ -36,24 +75,55 @@ void ScreenshotProcess::SetStopFrameImage(QPixmap image){
     repaint();
 }
 
-void ScreenshotProcess::CreateScreenshot(QRect rect){
+void ScreenshotProcess::CreateScreenshot(QRect rect, QPixmap draw){
     QRect convert = ConvertGlobalCoords(QPoint(rect.x(), rect.y()), QPoint(rect.x() + rect.width(), rect.y() + rect.height()));
 
-    _animationManager.Create_WindowOpacity(this, [this, convert](){
-                            ClearBorderLines();
-                            _screenshotHighlightArea->Hide();
-                            hide();
+    _screenshotProcessTools->Hide();
+    _screenshotHighlightArea->Hide();
 
-                            if(GetProgramSettings().Get_StopFrame()){
-                                qreal scaleX = static_cast<qreal>(width()) / _bufferStopFrame.width();
-                                qreal scaleY = static_cast<qreal>(height()) / _bufferStopFrame.height();
+    _animationManager.Create_WindowOpacity(this, [this, convert, draw](){
+        ClearBorderLines();
 
-                                emit ScreenshotProcessEnd(_bufferStopFrame.copy(QRect(convert.x() / scaleX, convert.y() / scaleY, convert.width() / scaleX, convert.height() / scaleY)));
-                            }else
-                                emit ScreenshotProcessEnd(GetActiveScreen()->grabWindow(0, convert.x(), convert.y(), convert.width(), convert.height()));
+        hide();
+        emit ProcessEvent_HideEnd();
 
-                        }, 100, 1, 0).Start();
+        QPixmap screenshot;
+        QPixmap drawBuffer = draw;
+
+        if(GetProgramSettings().Get_StopFrame()){
+            qreal scaleX = static_cast<qreal>(width()) / _bufferStopFrame.width();
+            qreal scaleY = static_cast<qreal>(height()) / _bufferStopFrame.height();
+
+            QRect rectBuffer = QRect(convert.x() / scaleX, convert.y() / scaleY, convert.width() / scaleX, convert.height() / scaleY);
+
+            screenshot = _bufferStopFrame.copy(rectBuffer);
+            drawBuffer = drawBuffer.scaled(rectBuffer.size());
+        }else
+            screenshot = QGuiApplication::primaryScreen()->grabWindow(0, convert.x(), convert.y(), convert.width(), convert.height());
+
+        // Смешиваем скриншот с полем рисования
+        if(!drawBuffer.isNull()){
+            QPainter painter(&screenshot);
+            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            painter.drawPixmap(0, 0, drawBuffer);
+        }
+
+        bool history_hide = _screenshotProcessTools->GetScreenshotDisplay();
+        emit ScreenshotProcess_CreateScreenshot(screenshot, history_hide);
+
+        // Проигрываем звук создания скриншота
+        emit PlaySound(SOUND_TYPE_PRINTSCREEN);
+
+    }, 100, 1, 0).Start();
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ScreenshotProcess::PenDashLinesInit(QMap<QString, QVector<QVector<qreal>>> blockPatterns){
+    _screenshotProcessTools->PenDashLinesInit(blockPatterns);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ScreenshotProcess::AreaMove(QRect rect){
     _hightlightAreaGeometry = rect;
@@ -80,15 +150,18 @@ void ScreenshotProcess::paintEvent(QPaintEvent *){
     paint.setBrush(QBrush(QColor(0, 0, 0, 50)));
     paint.drawRect(0, 0, width(), height());
 
-    paint.setPen(QPen(Qt::red, 1, Qt::DashLine, Qt::SquareCap));
+    paint.setPen(QPen(Qt::red, 2, Qt::DashLine, Qt::SquareCap));
     paint.setBrush(QBrush(QColor(0, 0, 0, 0)));
     paint.drawRect(_hightlightAreaGeometry);
 }
 
 void ScreenshotProcess::mousePressEvent(QMouseEvent *event){
     if(!_mouseLeftPressed && event->buttons() == Qt::LeftButton){
-        ClearBorderLines();
-        _screenshotHighlightArea->Hide();
+
+        if(_screenshotHighlightArea->GetDrawMode() == MODE_NONE){
+            ClearBorderLines();
+            _screenshotHighlightArea->Hide();
+        }
 
         _mouseLeftPressed = true;
         _mousePressGlobalPositionStart = event->globalPosition();
@@ -96,7 +169,7 @@ void ScreenshotProcess::mousePressEvent(QMouseEvent *event){
 }
 
 void ScreenshotProcess::mouseMoveEvent(QMouseEvent *event){
-    if(_mouseLeftPressed){
+    if(_mouseLeftPressed && _screenshotHighlightArea->GetDrawMode() == MODE_NONE){
         _hightlightAreaGeometry.setX(_mousePressGlobalPositionStart.x());
         _hightlightAreaGeometry.setY(_mousePressGlobalPositionStart.y());
         _hightlightAreaGeometry.setWidth(event->globalPosition().x() - _hightlightAreaGeometry.x());
@@ -106,14 +179,23 @@ void ScreenshotProcess::mouseMoveEvent(QMouseEvent *event){
     }
 }
 
-void ScreenshotProcess::mouseReleaseEvent(QMouseEvent *event){    
-    if(_mouseLeftPressed){
+void ScreenshotProcess::mouseReleaseEvent(QMouseEvent *event){
+    if(_mouseLeftPressed && _screenshotHighlightArea->GetDrawMode() == MODE_NONE){
         QRect convertArea = ConvertGlobalCoords(_mousePressGlobalPositionStart.toPoint(), event->globalPosition().toPoint());
 
-        if(emit GetProgramSettings().Get_ShowModificationArea())
-            _screenshotHighlightArea->Show(convertArea);
-        else
-            CreateScreenshot(convertArea);
+        // Устанавливаем минимальный допустимый размер
+        QRect minSize = convertArea;
+        minSize.setWidth(FormMinimumWidth);
+        minSize.setHeight(FormMinimumHeight);
+
+        // Если созданная область больше или равно минимальной - то создаем выделение
+        if((convertArea & minSize) == minSize){
+            if((emit GetProgramSettings()).Get_ShowModificationArea()){
+                _screenshotHighlightArea->Show(convertArea);
+            }else
+                CreateScreenshot(convertArea, QPixmap());
+        }else
+            ClearBorderLines();
     }
 
     _mouseLeftPressed = false;
@@ -122,6 +204,11 @@ void ScreenshotProcess::mouseReleaseEvent(QMouseEvent *event){
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ScreenshotProcess::ClearFigure(){
+    _screenshotHighlightArea->DeleteFigure(nullptr, false);
+    _screenshotHighlightArea->DeleteLine(nullptr, false);
+}
 
 void ScreenshotProcess::ClearBorderLines(){
     _hightlightAreaGeometry = QRect(0, 0, 0, 0);

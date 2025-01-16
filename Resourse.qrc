@@ -1,15 +1,27 @@
 <RCC>
     <qresource prefix="/Buttons">
-        <file>Resourse/Buttons/Settings.png</file>
-        <file>Resourse/Buttons/Settings_Transparent.png</file>
         <file>Resourse/Buttons/Close.png</file>
-        <file>Resourse/Buttons/Close_Transparent.png</file>
-        <file>Resourse/Buttons/Clear.png</file>
-        <file>Resourse/Buttons/Clear_Transparent.png</file>
-        <file>Resourse/Buttons/Resize.png</file>
-        <file>Resourse/Buttons/Resize_Transparent.png</file>
+        <file>Resourse/Buttons/Close_Hover.png</file>
+        <file>Resourse/Buttons/Sound_Test.png</file>
+        <file>Resourse/Buttons/Sound_Test_Hover.png</file>
+        <file>Resourse/Buttons/Draggable.png</file>
+        <file>Resourse/Buttons/Settings.png</file>
+        <file>Resourse/Buttons/Settings_Hover.png</file>
+        <file>Resourse/Buttons/Unload.png</file>
+        <file>Resourse/Buttons/Unload_Hover.png</file>
         <file>Resourse/Buttons/Upload.png</file>
-        <file>Resourse/Buttons/Upload_Transparent.png</file>
+        <file>Resourse/Buttons/Upload_Hover.png</file>
+        <file>Resourse/Buttons/Clear.png</file>
+        <file>Resourse/Buttons/Clear_Hover.png</file>
+        <file>Resourse/Buttons/Resize.png</file>
+        <file>Resourse/Buttons/Resize_Hover.png</file>
+        <file>Resourse/Buttons/Drawing/Broom.png</file>
+        <file>Resourse/Buttons/Drawing/Eraser.png</file>
+        <file>Resourse/Buttons/Drawing/Line.png</file>
+        <file>Resourse/Buttons/Drawing/Pen.png</file>
+        <file>Resourse/Buttons/Drawing/Shapes.png</file>
+        <file>Resourse/Buttons/Drawing/Hide.png</file>
+        <file>Resourse/Buttons/Drawing/Show.png</file>
     </qresource>
     <qresource prefix="/CheckBox">
         <file>Resourse/CheckBox/CheckBox_Checked.png</file>
@@ -26,10 +38,13 @@
         <file>Resourse/ComboBox/Arrow-Down.png</file>
         <file>Resourse/ComboBox/Arrow-Up.png</file>
     </qresource>
-    <qresource prefix="/sounds">
+    <qresource prefix="/Sounds">
+        <file>Resourse/Sounds/button_click.wav</file>
+        <file>Resourse/Sounds/button_hover.wav</file>
+        <file>Resourse/Sounds/clipboard_image_add.wav</file>
+        <file>Resourse/Sounds/popup.wav</file>
         <file>Resourse/Sounds/printscreen.wav</file>
         <file>Resourse/Sounds/recycle_cleaning.wav</file>
-        <file>Resourse/Sounds/popup.wav</file>
-        <file>Resourse/Sounds/removefile.mp3</file>
+        <file>Resourse/Sounds/remove_file.wav</file>
     </qresource>
 </RCC>

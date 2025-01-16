@@ -122,6 +122,7 @@ void AnimationsManager::Stop(){
 // Перезапуск анимации
 void AnimationsManager::Restart(){
     if(_animation != nullptr){
+
         Stop();
 
         switch(_animationType){
