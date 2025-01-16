@@ -73,7 +73,7 @@ void ScreenshotProcessHighlightedArea::SetDrawMode(PAINTING_MODE mode){
                 _Line = std::make_unique<LineObjectClass>(this);
 
                 connect(_Line.get(), &LineObjectClass::LineDeleteRequest, this, &ScreenshotProcessHighlightedArea::LineDeleteRequest);
-                connect(_Line.get(), &LineObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::FigureCreateScreenshot);
+                connect(_Line.get(), &LineObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::PreCreateScreenshot);
 
                 _Line->SetData(_lineData);
             }
@@ -293,7 +293,7 @@ void ScreenshotProcessHighlightedArea::UpdateFigure(FIGURE_TYPE type, QWidget *p
 
     bool displaying = _Figure->isDisplayed();
     QRect geometryData = _Figure->getGeometry();
-    disconnect(_Figure.get(), &FigureObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::FigureCreateScreenshot);
+    disconnect(_Figure.get(), &FigureObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::PreCreateScreenshot);
 
     switch(type){
         case FIGURE_TYPE_COUNT: return;
@@ -308,7 +308,7 @@ void ScreenshotProcessHighlightedArea::UpdateFigure(FIGURE_TYPE type, QWidget *p
     _Figure->SetData(_figureData);
     _Figure->SetGeometry(geometryData);
     _Figure->SetMarkerSize(FIGURE_MARKER_SIZE);
-    connect(_Figure.get(), &FigureObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::FigureCreateScreenshot);
+    connect(_Figure.get(), &FigureObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::PreCreateScreenshot);
 
     if(displaying)
         _Figure->Show();
@@ -330,7 +330,7 @@ void ScreenshotProcessHighlightedArea::CreateFigure(FIGURE_TYPE type, QWidget *p
     }
 
     _Figure->SetMarkerSize(FIGURE_MARKER_SIZE);
-    connect(_Figure.get(), &FigureObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::FigureCreateScreenshot);
+    connect(_Figure.get(), &FigureObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::PreCreateScreenshot);
 }
 
 // Удаление нарисованной активной фигуры
@@ -344,7 +344,7 @@ void ScreenshotProcessHighlightedArea::DeleteFigure(QPixmap *drawArea, bool dele
         _Figure->Hide();
 
         if(delete_permanently){
-            disconnect(_Figure.get(), &FigureObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::FigureCreateScreenshot);
+            disconnect(_Figure.get(), &FigureObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::PreCreateScreenshot);
             _Figure.reset();
         }
     }
@@ -362,7 +362,7 @@ void ScreenshotProcessHighlightedArea::DeleteLine(QPixmap *drawArea, bool delete
 
         if(delete_permanently){
             disconnect(_Line.get(), &LineObjectClass::LineDeleteRequest, this, &ScreenshotProcessHighlightedArea::LineDeleteRequest);
-            disconnect(_Line.get(), &LineObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::FigureCreateScreenshot);
+            disconnect(_Line.get(), &LineObjectClass::RightClick, this, &ScreenshotProcessHighlightedArea::PreCreateScreenshot);
 
             _Line.reset();
         }
@@ -370,10 +370,10 @@ void ScreenshotProcessHighlightedArea::DeleteLine(QPixmap *drawArea, bool delete
 }
 
 // Инициализация создания скриншота
-void ScreenshotProcessHighlightedArea::FigureCreateScreenshot(){
-    // Удаляем фигуру если она была, и переносим ее проекцию на холст
-    DeleteFigure(&_drawArea, true);
-    DeleteLine(&_drawArea, true);
+void ScreenshotProcessHighlightedArea::PreCreateScreenshot(){
+    // Удаляем обьекты если они были, и переносим проекцию на холст
+    DeleteFigure(&_drawArea, false);
+    DeleteLine(&_drawArea, false);
 
     // Создаем скриншот
     emit CreateScreenshot(QRect(pos().x(), pos().y(), width(), height()), _drawArea);
@@ -446,7 +446,7 @@ void ScreenshotProcessHighlightedArea::mousePressEvent(QMouseEvent *pe){
     // Right button
     if(pe->buttons() == Qt::RightButton){
         // Создаем скриншот
-        emit CreateScreenshot(QRect(pos().x(), pos().y(), width(), height()), _drawArea);
+        PreCreateScreenshot();
 
         return;
     }

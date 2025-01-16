@@ -59,7 +59,7 @@ public slots:
     void LineCapInit(QComboBox *start, QComboBox *end);
 
     void ClearDrawArea();
-    void FigureCreateScreenshot();
+    void PreCreateScreenshot();
 
     void LineDeleteRequest();
 

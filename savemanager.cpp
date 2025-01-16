@@ -126,7 +126,7 @@ void SaveManager::LoadSettings(){
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     PortSetting.beginGroup("HISTORY");
-    _settingsData.Set_HistorySize(PortSetting.value("HistorySize", 10).toInt());
+    _settingsData.Set_HistorySize(PortSetting.value("HistorySize", 100).toInt());
     _settingsData.Set_ViewerShowPercent(PortSetting.value("ViewShowPercent", true).toBool());
     PortSetting.endGroup();
 
